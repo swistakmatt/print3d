@@ -1,10 +1,9 @@
-require('dotenv').config();
+import 'dotenv/config';
 
 import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import { configureExpressMiddlewares } from './middlewares';
 
-import './controllers/auth';
 import http from 'http';
 
 const express = require('express');
@@ -19,11 +18,17 @@ configureExpressMiddlewares(app);
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
 app.get('/', (req: Request, res: Response) => {
-	res.send('Welcome to the eSport Drafts API!');
+	res.send('Welcome to the print3d.tools!');
 });
 
+const mongoUser = process.env.DB_USER;
+const mongoPass = process.env.DB_PASSWORD;
+const mongoUri = `mongodb://${mongoUser}:${mongoPass}@localhost:27017/`;
+
 mongoose
-	.connect(process.env.MONGO_URL || 'mongodb://localhost:2137')
+	.connect(mongoUri, {
+		dbName: 'print3d',
+	})
 	.then(async () => {
 		console.log('Connected to MongoDB');
 
