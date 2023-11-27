@@ -1,15 +1,13 @@
 import 'dotenv/config';
-
-import mongoose from 'mongoose';
-import { Request, Response } from 'express';
-import { configureExpressMiddlewares } from './middlewares';
-
 import http from 'http';
+import mongoose from 'mongoose';
+import { Application, Request, Response } from 'express';
+import { configureExpressMiddlewares } from './middlewares';
 
 const express = require('express');
 const cors = require('cors');
 
-const app = express();
+const app: Application = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
