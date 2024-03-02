@@ -1,0 +1,45 @@
+$colors: (
+  primary: #007bff,
+  secondary: #6c757d,
+  success: #28a745,
+  info: #17a2b8,
+  warning: #ffc107,
+  danger: #dc3545,
+  light: #f8f9fa,
+  dark: #343a40,
+  white: #ffffff,
+);
+
+$font-family: (
+  primary: 'Roboto',
+  secondary: 'Open Sans',
+  tertiary: 'Lato',
+  quaternary: sans-serif,
+);
+
+@each $color, $value in $colors {
+  .text-#{$color} {
+    color: $value;
+
+    @if ($color == 'white') {
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .bg-#{$color} {
+    background-color: $value;
+  }
+}
+
+@each $font, $value in $font-family {
+  .font-#{$font} {
+    font-family: $value;
+  }
+}
+
+html {
+  font-size: 12px;
+  font-family: 'Roboto', 'Open Sans', 'Lato', sans-serif;
+  margin: 0;
+  padding: 0;
+}
