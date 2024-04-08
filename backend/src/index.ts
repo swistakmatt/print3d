@@ -6,6 +6,7 @@ import { configureExpressMiddlewares } from './middlewares';
 
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 
 const app: Application = express();
 const server = http.createServer(app);
@@ -14,6 +15,8 @@ const PORT = process.env.PORT || 3000;
 configureExpressMiddlewares(app);
 
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+
+app.use(helmet());
 
 app.get('/', (req: Request, res: Response) => {
 	res.send('Welcome to the print3d.tools!');
