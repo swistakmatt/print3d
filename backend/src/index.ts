@@ -2,25 +2,27 @@ import 'dotenv/config';
 import http from 'http';
 import mongoose from 'mongoose';
 import { Application, Request, Response } from 'express';
+import { applyPassportStrategy } from './passportConfig';
 import { configureExpressMiddlewares } from './middlewares';
 
+import authRoutes from './routes/auth';
+
 const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
 
 const app: Application = express();
+
+applyPassportStrategy(app);
+
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
 
 configureExpressMiddlewares(app);
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-
-app.use(helmet());
-
 app.get('/', (req: Request, res: Response) => {
 	res.send('Welcome to the print3d.tools!');
 });
+
+app.use('/auth', authRoutes);
 
 const mongoUser = process.env.DB_USER;
 const mongoPass = process.env.DB_PASSWORD;

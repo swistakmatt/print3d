@@ -1,45 +1,47 @@
 import mongoose from 'mongoose';
 
+const emailRegex =
+	/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const UserSchema = new mongoose.Schema(
 	{
 		admin: {
 			type: Boolean,
 			default: false,
 		},
-		firstname: {
-			type: String,
-			required: true,
-		},
-		lastname: {
-			type: String,
-			required: true,
-		},
 		email: {
 			type: String,
-			unique: true,
 			required: true,
+			unique: true,
+			lowercase: true,
+			match: emailRegex,
+		},
+		username: {
+			type: String,
+			required: true,
+			trim: true,
+			index: true,
 		},
 		password: {
 			type: String,
 			required: true,
 			trim: true,
-			minLength: 8,
+			minlength: 12,
 		},
 		phone: {
-			type: Number,
+			type: String,
 			required: true,
 			unique: true,
+			trim: true,
+			minlength: 9,
+			maxlength: 15,
 		},
-		tokens: [
-			{
-				token: {
-					type: String,
-					required: true,
-				},
-			},
-		],
 	},
 	{
 		timestamps: true,
 	}
 );
+
+const User = mongoose.model('User', UserSchema);
+
+export default User;
