@@ -1,1 +1,20 @@
-<p>login works!</p>
+<div class="card flex justify-content-center">
+  <p-dialog
+    header="Login"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '50vw' }"
+    (onHide)="closeDialog()">
+    <form (ngSubmit)="onSubmit()">
+      <input pInputText formControlName="username" placeholder="Username" />
+      <p-password
+        formControlName="password"
+        placeholder="Password"></p-password>
+      <p-button
+        type="submit"
+        label="Login"
+        [disabled]="loginForm.invalid"
+        (click)="onSubmit()"></p-button>
+    </form>
+  </p-dialog>
+</div>

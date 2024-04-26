@@ -1,0 +1,11 @@
+<p-button
+  label="Login"
+  severity="success"
+  (click)="showLoginDialog()"></p-button>
+<p-button
+  label="Register"
+  severity="primary"
+  (click)="showRegisterDialog()"></p-button>
+
+<app-login [(visible)]="loginDialogVisible"></app-login>
+<app-register [(visible)]="registerDialogVisible"></app-register>

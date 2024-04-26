@@ -1,1 +1,29 @@
-<p>register works!</p>
+<div class="card flex justify-content-center">
+  <p-dialog
+    header="Register"
+    [modal]="true"
+    [(visible)]="visible"
+    [style]="{ width: '50vw' }"
+    (onHide)="closeDialog()">
+    <div class="content">
+      <form (ngSubmit)="onSubmit()">
+        <input pInputText formControlName="username" placeholder="Username" />
+        <input pInputText formControlName="email" placeholder="Email" />
+        <p-password
+          formControlName="password"
+          placeholder="Password"></p-password>
+        <p-password
+          formControlName="confirmPassword"
+          placeholder="Confirm Password"></p-password>
+      </form>
+    </div>
+    <p-footer>
+      <button
+        pButton
+        type="submit"
+        label="Register"
+        [disabled]="registerForm.invalid"
+        (click)="onSubmit()"></button>
+    </p-footer>
+  </p-dialog>
+</div>
