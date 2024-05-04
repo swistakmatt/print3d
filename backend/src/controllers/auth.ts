@@ -24,9 +24,9 @@ export const validateRegister = [
 		.withMessage(
 			'Password must be at least 12 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.'
 		),
-	body('phone')
-		.isMobilePhone('pl-PL')
-		.withMessage('You must provide a valid phone number for Poland.'),
+	// body('phone')
+	// 	.isMobilePhone('pl-PL')
+	// 	.withMessage('You must provide a valid phone number for Poland.'),
 ];
 
 const handleValidationErrors = (
@@ -46,7 +46,7 @@ export const login = [
 	handleValidationErrors,
 	async (req: Request, res: Response) => {
 		try {
-			const { username, password } = req.body;
+			const { username, password, permanentJwt } = req.body;
 
 			const user = await User.findOne({ username });
 			if (!user) {
@@ -62,15 +62,38 @@ export const login = [
 					.json({ message: 'Authentication failed. Incorrect password.' });
 			}
 
-			const token = jwt.sign(
-				{ sub: user._id, username: user.username },
-				process.env.JWT_SECRET!,
-				{ expiresIn: '1h' }
-			);
+			let token: string;
+			let jwtSecret: string;
 
-			res.json({ token, userId: user._id });
+			try {
+				if (process.env.JWT_SECRET) {
+					jwtSecret = process.env.JWT_SECRET;
+				} else {
+					throw new Error('JWT_SECRET not found in environment variables.');
+				}
+			} catch (error) {
+				return res.status(500).json({ message: error });
+			}
+
+			if (permanentJwt === true) {
+				token = jwt.sign({ sub: user._id }, jwtSecret, {
+					expiresIn: '365d',
+				});
+			} else {
+				token = jwt.sign({ sub: user._id }, jwtSecret, {
+					expiresIn: '1h',
+				});
+			}
+
+			res.json({
+				userId: user._id,
+				admin: user.admin,
+				username: user.username,
+				email: user.email,
+				token,
+			});
 		} catch (error) {
-			res.status(500).json({ message: 'Internal server error.' });
+			res.status(500).json({ message: 'Internal Server Error.' });
 		}
 	},
 ];
@@ -80,15 +103,14 @@ export const register = [
 	handleValidationErrors,
 	async (req: Request, res: Response) => {
 		try {
-			const { username, email, password, phone } = req.body;
+			const { username, email, password } = req.body;
 
 			const existingUser = await User.findOne({
-				$or: [{ username }, { email }, { phone }],
+				$or: [{ username }, { email }],
 			});
 			if (existingUser) {
 				return res.status(409).json({
-					message:
-						'User already exists with that username, email, or phone number.',
+					message: 'User already exists with that username or email.',
 				});
 			}
 
@@ -99,13 +121,12 @@ export const register = [
 				username: req.body.username,
 				email: req.body.email,
 				password: hashedPassword,
-				phone: req.body.phone,
 			});
 
 			await user.save();
 			res.status(201).json({ message: 'User successfully registered.' });
 		} catch (error) {
-			res.status(500).json({ message: 'Internal server error.' });
+			res.status(500).json({ message: { error } });
 		}
 	},
 ];
