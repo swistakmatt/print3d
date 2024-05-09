@@ -4,7 +4,16 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../interfaces/User';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -15,6 +24,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
     ButtonModule,
     InputTextModule,
     PasswordModule,
+    ReactiveFormsModule,
+    ToastModule,
   ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
@@ -25,15 +36,27 @@ export class RegisterComponent {
 
   registerForm: FormGroup;
 
-  constructor() {
+  constructor(
+    private authService: AuthService,
+    private toastService: MessageService
+  ) {
+    const emailRegex =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
     this.registerForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(20),
+      ]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.pattern(emailRegex),
+      ]),
       password: new FormControl('', [
         Validators.required,
-        Validators.minLength(6),
+        Validators.minLength(12),
       ]),
-      // Dodaj dodatkowe pola formularza w razie potrzeby
     });
   }
 
@@ -44,8 +67,31 @@ export class RegisterComponent {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
-      // Wywołaj tutaj serwis AuthService z metodą register
+      const { username, email, password } = this.registerForm.value;
+      this.authService.register({ username, email, password }).subscribe({
+        next: user => {
+          this.toastService.add({
+            severity: 'success',
+            summary: 'Registration Successful',
+            detail: 'You have registered successfully!',
+          });
+          this.closeDialog();
+        },
+        error: error => {
+          this.toastService.add({
+            severity: 'error',
+            summary: 'Registration Failed',
+            detail:
+              'There was a problem with the registration: ' + error.message,
+          });
+        },
+      });
+    } else {
+      this.toastService.add({
+        severity: 'error',
+        summary: 'Validation Error',
+        detail: 'Please check your entries.',
+      });
     }
   }
 }

@@ -3,25 +3,49 @@
     header="Register"
     [modal]="true"
     [(visible)]="visible"
-    [style]="{ width: '50vw' }"
     (onHide)="closeDialog()">
-    <div class="content">
-      <form (ngSubmit)="onSubmit()">
-        <input pInputText formControlName="username" placeholder="Username" />
-        <input pInputText formControlName="email" placeholder="Email" />
+    <form
+      class="register-form"
+      [formGroup]="registerForm"
+      (ngSubmit)="onSubmit()">
+      <span class="p-float-label">
+        <input pInputText class="p-inputtext-sm" formControlName="username" />
+
+        <label for="username">Username</label>
+      </span>
+      <span class="p-float-label">
+        <input pInputText class="p-inputtext-sm" formControlName="email" />
+        <label for="username">E-mail</label>
+      </span>
+      <span class="p-float-label">
         <p-password
+          class="p-inputtext-sm"
           formControlName="password"
-          placeholder="Password"></p-password>
+          [toggleMask]="true"
+          [feedback]="false">
+          >
+        </p-password>
+        <label for="password">Password</label>
+      </span>
+      <span class="p-float-label">
         <p-password
+          class="p-inputtext-sm"
           formControlName="confirmPassword"
-          placeholder="Confirm Password"></p-password>
-      </form>
-    </div>
+          [toggleMask]="true"
+          [feedback]="false">
+          >
+        </p-password>
+        <label for="password">Confirm Password</label>
+      </span>
+    </form>
+
     <p-footer>
       <button
         pButton
         type="submit"
-        label="Register"
+        label="Submit"
+        size="small"
+        [raised]="true"
         [disabled]="registerForm.invalid"
         (click)="onSubmit()"></button>
     </p-footer>

@@ -1,11 +1,55 @@
+<p-sidebar [visible]="sidebarVisible" (onHide)="showSidebar()">
+  <ng-template pTemplate="header" class="p-sidebar-header-wrapper">
+    <h3>print3d</h3>
+  </ng-template>
+  <ng-template pTemplate="content">Body Content</ng-template>
+  <ng-template pTemplate="footer">
+    <div class="footer-wrapper">
+      @if (!currentUser) {
+        <div class="login-register-buttons">
+          <p-button
+            label="Login"
+            icon="pi pi-sign-in"
+            severity="success"
+            size="small"
+            [raised]="true"
+            (click)="showLoginDialog()"></p-button>
+          <p-button
+            label="Register"
+            icon="pi pi-user-plus"
+            severity="primary"
+            size="small"
+            [raised]="true"
+            (click)="showRegisterDialog()"></p-button>
+        </div>
+      }
+      @if (currentUser) {
+        <div class="current-user-info">
+          <p>
+            Logged in as:
+            <b>{{ currentUser.username }}</b>
+          </p>
+          <p-button
+            label="Logout"
+            icon="pi pi-sign-out"
+            severity="warn"
+            size="small"
+            [raised]="true"
+            (click)="logoutConfirm($event)"></p-button>
+        </div>
+      }
+    </div>
+  </ng-template>
+</p-sidebar>
+
 <p-button
-  label="Login"
-  severity="success"
-  (click)="showLoginDialog()"></p-button>
-<p-button
-  label="Register"
-  severity="primary"
-  (click)="showRegisterDialog()"></p-button>
+  (click)="showSidebar()"
+  icon="pi pi-bars"
+  severity="primary"></p-button>
 
 <app-login [(visible)]="loginDialogVisible"></app-login>
 <app-register [(visible)]="registerDialogVisible"></app-register>
+<!-- <app-canvas-box></app-canvas-box> -->
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

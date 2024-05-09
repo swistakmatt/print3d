@@ -2,37 +2,43 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User, UserRegister } from '../interfaces/User';
+import { User } from '../interfaces/User';
+
+interface UserRegister {
+  email: string;
+  username: string;
+  password: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
+  private currentUserSubject: BehaviorSubject<User | null>;
+  public currentUser: Observable<User | null>;
 
-  private API_URL = 'http://localhost:3000/auth';
+  private API_URL = 'http://localhost:3000';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
 
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(
-      JSON.parse(localStorage.getItem('currentUser')!)
-    );
+    const storedUser = localStorage.getItem('currentUser');
+    const currentUser = storedUser ? JSON.parse(storedUser) : null;
+    this.currentUserSubject = new BehaviorSubject<User | null>(currentUser);
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  public get currentUserValue(): User {
-    return this.currentUserSubject.value;
-  }
-
-  login(username: string, password: string): Observable<User> {
+  login(
+    username: string,
+    password: string,
+    permanentJwt: boolean
+  ): Observable<User> {
     return this.http
       .post<User>(
-        `${this.API_URL}/login`,
-        { username, password },
+        `${this.API_URL}/auth/login`,
+        { username, password, permanentJwt },
         this.httpOptions
       )
       .pipe(
@@ -46,7 +52,7 @@ export class AuthService {
 
   register(user: UserRegister): Observable<User> {
     return this.http.post<User>(
-      `${this.API_URL}/register`,
+      `${this.API_URL}/auth/register`,
       user,
       this.httpOptions
     );

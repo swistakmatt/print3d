@@ -1,1 +1,30 @@
 @import '../../../variable-colors.scss';
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 28px;
+  padding: 24px 12px 0 12px;
+
+  box-sizing: border-box;
+}
+
+.login-form-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+  margin: -4px 0 0 0;
+
+  font-size: 12px;
+}
+
+span label {
+  font-size: 12px;
+  line-height: 14px;
+}

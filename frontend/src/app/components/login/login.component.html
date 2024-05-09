@@ -3,18 +3,53 @@
     header="Login"
     [modal]="true"
     [(visible)]="visible"
-    [style]="{ width: '50vw' }"
     (onHide)="closeDialog()">
-    <form (ngSubmit)="onSubmit()">
-      <input pInputText formControlName="username" placeholder="Username" />
-      <p-password
-        formControlName="password"
-        placeholder="Password"></p-password>
+    <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <span class="p-float-label">
+        <input pInputText class="p-inputtext-sm" formControlName="username" />
+        <label for="username">Username</label>
+      </span>
+      <span class="p-float-label">
+        <p-password
+          class="p-inputtext-sm"
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="false">
+          <!-- <ng-template pTemplate="header">
+            <h6>Enter your password</h6>
+          </ng-template>
+          <ng-template pTemplate="footer">
+            <p-divider></p-divider>
+            <p class="mt-2">Suggestions</p>
+            <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+              <li>At least one lowercase</li>
+              <li>At least one uppercase</li>
+              <li>At least one numeric</li>
+              <li>Minimum 8 characters</li>
+            </ul>
+          </ng-template> -->
+        </p-password>
+        <label for="password">Password</label>
+      </span>
+      <div class="login-form-checkbox">
+        <p-checkbox
+          class="p-inputtext-sm"
+          formControlName="permanentJwt"
+          binary="true"
+          value="false"
+          inputId="dontLogout"></p-checkbox>
+        <label for="dontLogout">Don't log me out</label>
+      </div>
+    </form>
+
+    <p-footer>
       <p-button
         type="submit"
-        label="Login"
+        label="Submit"
+        size="small"
+        [raised]="true"
         [disabled]="loginForm.invalid"
         (click)="onSubmit()"></p-button>
-    </form>
+    </p-footer>
   </p-dialog>
 </div>
