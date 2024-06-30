@@ -4,10 +4,12 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DividerModule } from 'primeng/divider';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { AuthService } from '../../services/auth.service';
-import { User } from '../../interfaces/User';
+import { AuthService } from '../../../services/auth.service';
+import { User } from '../../../interfaces/User';
 import {
   FormControl,
   FormGroup,
@@ -16,7 +18,7 @@ import {
 } from '@angular/forms';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-login',
   standalone: true,
   imports: [
     CommonModule,
@@ -24,39 +26,31 @@ import {
     ButtonModule,
     InputTextModule,
     PasswordModule,
+    CheckboxModule,
+    DividerModule,
     ReactiveFormsModule,
     ToastModule,
   ],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss',
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
 })
-export class RegisterComponent {
+export class LoginComponent {
   @Input() visible: boolean = false;
   @Output() visibleChange = new EventEmitter<boolean>();
 
-  registerForm: FormGroup;
+  loginForm: FormGroup;
 
   constructor(
     private authService: AuthService,
     private toastService: MessageService
   ) {
-    const emailRegex =
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    this.registerForm = new FormGroup({
-      username: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(20),
-      ]),
-      email: new FormControl('', [
-        Validators.required,
-        Validators.pattern(emailRegex),
-      ]),
+    this.loginForm = new FormGroup({
+      username: new FormControl('', Validators.required),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(12),
       ]),
+      permanentJwt: new FormControl<boolean>(false),
     });
   }
 
@@ -66,23 +60,24 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    if (this.registerForm.valid) {
-      const { username, email, password } = this.registerForm.value;
-      this.authService.register({ username, email, password }).subscribe({
+    if (this.loginForm.valid) {
+      const { username, password, permanentJwt } = this.loginForm.value;
+      this.authService.login(username, password, permanentJwt).subscribe({
         next: user => {
           this.toastService.add({
             severity: 'success',
-            summary: 'Registration Successful',
-            detail: 'You have registered successfully!',
+            summary: 'Login Successful',
+            detail: 'You are now logged in!',
           });
           this.closeDialog();
         },
         error: error => {
           this.toastService.add({
             severity: 'error',
-            summary: 'Registration Failed',
+            summary: 'Login Failed',
             detail:
-              'There was a problem with the registration: ' + error.message,
+              error.error.message ||
+              'Unknown error occurred. Please try again.',
           });
         },
       });

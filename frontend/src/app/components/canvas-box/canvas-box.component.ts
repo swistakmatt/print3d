@@ -43,16 +43,14 @@ export class CanvasBoxComponent {
 
     document.body.appendChild(renderer.domElement);
 
-    const material = new THREE.MeshToonMaterial();
-
     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xffffff, 1);
+    const pointLight = new THREE.PointLight(0xffffff, 5);
     pointLight.position.set(2, 2, 2);
     scene.add(pointLight);
 
+    const material = new THREE.MeshToonMaterial();
     const box = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), material);
-
     const torus = new THREE.Mesh(
       new THREE.TorusGeometry(5, 1.5, 16, 100),
       material
