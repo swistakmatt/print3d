@@ -8,11 +8,15 @@ import { RegisterComponent } from '../dialogs/register/register.component';
 import { SidebarService } from '../../services/sidebar.service';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../interfaces/User';
+import { MenuModule } from 'primeng/menu';
+import { PanelMenuModule } from 'primeng/panelmenu';
 import {
   ConfirmationService,
   MessageService,
   ConfirmEventType,
+  MenuItem,
 } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -21,6 +25,8 @@ import {
     CommonModule,
     SidebarModule,
     ButtonModule,
+    MenuModule,
+    PanelMenuModule,
     ConfirmDialogModule,
     LoginComponent,
     RegisterComponent,
@@ -35,7 +41,10 @@ export class SidebarComponent implements OnInit {
 
   currentUser?: User | null;
 
+  items: MenuItem[] | undefined;
+
   constructor(
+    private router: Router,
     private authService: AuthService,
     private confirmationService: ConfirmationService,
     private toastService: MessageService,
@@ -57,6 +66,34 @@ export class SidebarComponent implements OnInit {
     this.sidebarService.registerDialogVisible$.subscribe(visible => {
       this.registerDialogVisible = visible;
     });
+    this.items = [
+      {
+        label: 'Documents',
+        items: [
+          {
+            label: 'New',
+            icon: 'pi pi-plus',
+          },
+          {
+            label: 'Search',
+            icon: 'pi pi-search',
+          },
+        ],
+      },
+      {
+        label: 'Profile',
+        items: [
+          {
+            label: 'Settings',
+            icon: 'pi pi-cog',
+          },
+          {
+            label: 'Logout',
+            icon: 'pi pi-sign-out',
+          },
+        ],
+      },
+    ];
   }
 
   toggleSidebar(): void {

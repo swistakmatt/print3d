@@ -6,15 +6,8 @@
     <h3>print3d</h3>
   </ng-template>
   <ng-template pTemplate="content">
-    <div class="sidebar-content">
-      <p-button
-        label="Marketplace"
-        icon="pi pi-shopping-cart"
-        (click)="navigateToMarketplace()"></p-button>
-      <p-button
-        label="My Orders"
-        icon="pi pi-list"
-        (click)="navigateToMyOrders()"></p-button>
+    <div class="sidebar-menu-wrapper">
+      <p-menu styleClass="sidebar-menu" [model]="items" />
     </div>
   </ng-template>
   <ng-template pTemplate="footer">

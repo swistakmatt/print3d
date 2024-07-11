@@ -30,6 +30,10 @@ export class AuthService {
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
+  public get currentUserValue(): User | null {
+    return this.currentUserSubject.value;
+  }
+
   login(
     username: string,
     password: string,
