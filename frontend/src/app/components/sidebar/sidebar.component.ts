@@ -66,34 +66,6 @@ export class SidebarComponent implements OnInit {
     this.sidebarService.registerDialogVisible$.subscribe(visible => {
       this.registerDialogVisible = visible;
     });
-    this.items = [
-      {
-        label: 'Documents',
-        items: [
-          {
-            label: 'New',
-            icon: 'pi pi-plus',
-          },
-          {
-            label: 'Search',
-            icon: 'pi pi-search',
-          },
-        ],
-      },
-      {
-        label: 'Profile',
-        items: [
-          {
-            label: 'Settings',
-            icon: 'pi pi-cog',
-          },
-          {
-            label: 'Logout',
-            icon: 'pi pi-sign-out',
-          },
-        ],
-      },
-    ];
   }
 
   toggleSidebar(): void {
@@ -106,13 +78,6 @@ export class SidebarComponent implements OnInit {
 
   showRegisterDialog(): void {
     this.sidebarService.toggleRegisterDialog();
-  }
-
-  navigateToMyOrders() {
-    throw new Error('Method not implemented.');
-  }
-  navigateToMarketplace() {
-    throw new Error('Method not implemented.');
   }
 
   logoutConfirm(event: Event): void {
