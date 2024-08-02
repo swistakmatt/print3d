@@ -6,7 +6,7 @@ import { applyPassportStrategy } from './passportConfig';
 import { configureExpressMiddlewares } from './middlewares';
 
 import authRoutes from './routes/auth';
-import uploadRoutes from './routes/upload';
+import filesRoutes from './routes/fileStorage';
 
 const express = require('express');
 
@@ -24,7 +24,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/auth', authRoutes);
-app.use('/upload', uploadRoutes);
+app.use('/storage', filesRoutes);
 
 const mongoUser = process.env.DB_USER;
 const mongoPass = process.env.DB_PASSWORD;
