@@ -12,18 +12,17 @@ export const applyPassportStrategy = (app: Application): void => {
 
 	passport.use(
 		new JwtStrategy(options, (jwt_payload, done) => {
-			User.findOne({ id: jwt_payload.sub }, (err: Error, user: any) => {
-				if (err) {
-					return done(err, false);
-				}
-				if (user) {
-					return done(null, user);
-				} else {
-					return done(null, false);
-				}
-			});
+			User.findOne({ _id: jwt_payload.sub })
+				.then((user) => {
+					done(null, user);
+				})
+				.catch((err) => {
+					done(err, false);
+				});
 		})
 	);
 
 	app.use(passport.initialize());
 };
+
+export const authenticate = passport.authenticate('jwt', { session: false });

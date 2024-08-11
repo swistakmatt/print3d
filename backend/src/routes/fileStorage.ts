@@ -1,17 +1,20 @@
 import { Router } from 'express';
-import { upload, uploadToGridFS } from '../fileStorageConfig';
+import { upload } from '../fileStorageConfig';
+import { authenticate } from '../passportConfig';
 import {
 	uploadFile,
 	getAllFiles,
-	getFileByName,
-	getFileById,
+	searchFileById,
+	downloadFileById,
+	getFilesByOwnerId,
 } from '../controllers/fileStorage';
 
 const router = Router();
 
-router.post('/upload', upload.single('file'), uploadFile);
-router.get('/files', getAllFiles);
-router.get('/files/:id', getFileById);
-router.get('/files/:filename', getFileByName);
+router.post('/upload', authenticate, upload.single('file'), uploadFile);
+router.get('/files', authenticate, getAllFiles);
+router.get('/file/:fileId', authenticate, searchFileById);
+router.get('/files/owner/:ownerId', authenticate, getFilesByOwnerId);
+router.get('/file/download/:fileId', authenticate, downloadFileById);
 
 export default router;

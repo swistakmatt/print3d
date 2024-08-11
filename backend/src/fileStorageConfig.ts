@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 import { MongoClient, GridFSBucket } from 'mongodb';
+import { FileMetadata } from './types/File';
 
 const multer = require('multer');
 const stream = require('stream');
@@ -39,7 +39,10 @@ const closeDatabaseConnection = async (client: MongoClient) => {
 	}
 };
 
-const uploadToGridFS = async (file: Express.Multer.File, metadata: any) => {
+const uploadToGridFS = async (
+	file: Express.Multer.File,
+	metadata: FileMetadata
+) => {
 	const client = await connectToDatabase();
 	try {
 		const db = client.db('print3d');
