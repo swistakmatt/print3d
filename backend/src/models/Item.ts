@@ -19,7 +19,6 @@ const ItemSchema = new mongoose.Schema(
 		},
 		image: {
 			type: String,
-			required: true,
 			trim: true,
 		},
 		files: [{ type: mongoose.Schema.Types.ObjectId, ref: 'File' }],
