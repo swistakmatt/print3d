@@ -1,90 +1,10 @@
-// import { Component } from '@angular/core';
-// import * as THREE from 'three';
-
-// @Component({
-//   selector: 'app-canvas-box',
-//   standalone: true,
-//   imports: [],
-//   templateUrl: './canvas-box.component.html',
-//   styleUrl: './canvas-box.component.scss',
-// })
-// export class CanvasBoxComponent {
-//   constructor() {}
-
-//   ngAfterViewInit() {
-//     const scene = new THREE.Scene();
-
-//     const canvasSizes = {
-//       width: window.innerWidth,
-//       height: window.innerHeight,
-//     };
-
-//     const camera = new THREE.PerspectiveCamera(
-//       75,
-//       canvasSizes.width / canvasSizes.height,
-//       0.1,
-//       1000
-//     );
-
-//     const renderer = new THREE.WebGLRenderer();
-//     renderer.setClearColor(0xe232222, 1);
-//     renderer.setSize(canvasSizes.width, canvasSizes.height);
-
-//     window.addEventListener('resize', () => {
-//       canvasSizes.width = window.innerWidth;
-//       canvasSizes.height = window.innerHeight;
-
-//       camera.aspect = canvasSizes.width / canvasSizes.height;
-//       camera.updateProjectionMatrix();
-
-//       renderer.setSize(canvasSizes.width, canvasSizes.height);
-//       renderer.render(scene, camera);
-//     });
-
-//     document.body.appendChild(renderer.domElement);
-
-//     const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-//     scene.add(ambientLight);
-//     const pointLight = new THREE.PointLight(0xffffff, 5);
-//     pointLight.position.set(2, 2, 2);
-//     scene.add(pointLight);
-
-//     const material = new THREE.MeshToonMaterial();
-//     const box = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), material);
-//     const torus = new THREE.Mesh(
-//       new THREE.TorusGeometry(5, 1.5, 16, 100),
-//       material
-//     );
-
-//     scene.add(torus, box);
-
-//     camera.position.z = 30;
-
-//     const clock = new THREE.Clock();
-
-//     const animateGeometry = () => {
-//       const elapsedTime = clock.getElapsedTime();
-
-//       box.rotation.x = elapsedTime;
-//       box.rotation.y = elapsedTime;
-//       box.rotation.z = elapsedTime;
-
-//       torus.rotation.x = -elapsedTime;
-//       torus.rotation.y = -elapsedTime;
-//       torus.rotation.z = -elapsedTime;
-
-//       // Render
-//       renderer.render(scene, camera);
-
-//       // Call tick again on the next frame
-//       window.requestAnimationFrame(animateGeometry);
-//     };
-
-//     animateGeometry();
-//   }
-// }
-
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+  HostListener,
+} from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module';
@@ -97,70 +17,133 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
   templateUrl: './canvas-box.component.html',
   styleUrl: './canvas-box.component.scss',
 })
-export class CanvasBoxComponent {
+export class CanvasBoxComponent implements AfterViewInit {
   @ViewChild('rendererContainer')
   rendererContainer!: ElementRef<HTMLDivElement>;
+
+  private renderer!: THREE.WebGLRenderer;
+  private camera!: THREE.PerspectiveCamera;
+  private controls!: OrbitControls;
+  private scene!: THREE.Scene;
+  private stats!: Stats;
 
   constructor() {}
 
   ngAfterViewInit() {
-    const scene = new THREE.Scene();
-    scene.add(new THREE.AxesHelper(5));
-    const camera = new THREE.PerspectiveCamera(
+    this.initScene();
+    this.initCamera();
+    this.initRenderer();
+    this.initControls();
+    this.initLights();
+    this.loadSTLModel();
+
+    this.stats = new Stats();
+    document.body.appendChild(this.stats.dom);
+
+    this.animate();
+  }
+
+  private initScene() {
+    this.scene = new THREE.Scene();
+    this.scene.add(new THREE.AxesHelper(5));
+  }
+
+  private initCamera() {
+    this.camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
-    camera.position.z = 4;
+    this.camera.position.z = 4;
+  }
 
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    this.rendererContainer.nativeElement.appendChild(renderer.domElement);
+  private initRenderer() {
+    this.renderer = new THREE.WebGLRenderer();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
+  }
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
+  private initControls() {
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.enableDamping = true;
+  }
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(0, 10, 10);
-    scene.add(directionalLight);
+  private initLights() {
+    // Ambient light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 3.0);
+    this.scene.add(ambientLight);
 
-    const material = new THREE.MeshPhongMaterial({
-      color: 0x555555,
-      specular: 0x111111,
-      shininess: 200,
+    // Directional light 1
+    const directionalLight1 = new THREE.DirectionalLight(0xffffff, 4.0);
+    directionalLight1.position.set(5, 10, 7.5);
+    directionalLight1.castShadow = true;
+    this.scene.add(directionalLight1);
+
+    // Directional light 2
+    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 4.0);
+    directionalLight2.position.set(-5, -10, -7.5);
+    directionalLight2.castShadow = true;
+    this.scene.add(directionalLight2);
+
+    // Point light for more brightness
+    const pointLight = new THREE.PointLight(0xffffff, 1.5, 50);
+    pointLight.position.set(10, 10, 10);
+    this.scene.add(pointLight);
+
+    // Hemisphere light for a softer overall lighting
+    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 5.0);
+    hemisphereLight.position.set(0, 20, 0);
+    this.scene.add(hemisphereLight);
+  }
+
+  private loadSTLModel() {
+    const material = new THREE.MeshPhysicalMaterial({
+      color: 0xb2b2b2,
+      metalness: 0.7,
+      roughness: 0.4,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.1,
+      reflectivity: 0.8,
+      sheen: 0.5,
     });
-
-    // const material = new THREE.MeshToonMaterial();
 
     const loader = new STLLoader();
 
-    loader.load(
-      'assets/models/example.stl',
-      function (geometry) {
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-      },
-      xhr => {
-        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-      },
-      error => {
-        console.log(error);
-      }
+    loader.load('assets/models/example.stl', geometry => {
+      const mesh = new THREE.Mesh(geometry, material);
+      this.updateCameraPosition(mesh);
+      this.scene.add(mesh);
+    });
+  }
+
+  private updateCameraPosition(mesh: THREE.Mesh) {
+    const boundingBox = new THREE.Box3().setFromObject(mesh);
+    const center = boundingBox.getCenter(new THREE.Vector3());
+    const size = boundingBox.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const fov = this.camera.fov * (Math.PI / 180);
+    let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+    cameraZ *= 2; // Adjust camera distance
+    this.camera.position.set(
+      center.x + cameraZ,
+      center.y + cameraZ,
+      center.z + cameraZ
     );
+    this.camera.lookAt(center);
+  }
 
-    const stats = new Stats();
-    document.body.appendChild(stats.dom);
+  private animate() {
+    requestAnimationFrame(() => this.animate());
+    this.controls.update();
+    this.renderer.render(this.scene, this.camera);
+    this.stats.update();
+  }
 
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-      stats.update();
-    }
-
-    animate();
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.camera.aspect = window.innerWidth / window.innerHeight;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 }

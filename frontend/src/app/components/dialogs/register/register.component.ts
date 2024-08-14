@@ -57,6 +57,7 @@ export class RegisterComponent {
         Validators.required,
         Validators.minLength(12),
       ]),
+      confirmPassword: new FormControl('', [Validators.required]),
     });
   }
 

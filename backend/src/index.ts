@@ -7,6 +7,8 @@ import { configureExpressMiddlewares } from './middlewares';
 
 import authRoutes from './routes/auth';
 import filesRoutes from './routes/fileStorage';
+import itemRoutes from './routes/item';
+import orderRoutes from './routes/order';
 
 const express = require('express');
 
@@ -25,10 +27,15 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/auth', authRoutes);
 app.use('/storage', filesRoutes);
+app.use('/items', itemRoutes);
+app.use('/orders', orderRoutes);
 
 const mongoUser = process.env.DB_USER;
 const mongoPass = process.env.DB_PASSWORD;
 const mongoUri = `mongodb://${mongoUser}:${mongoPass}@localhost:27017/`;
+
+//TODO: remove debug mode
+mongoose.set('debug', true);
 
 mongoose
 	.connect(mongoUri, {
