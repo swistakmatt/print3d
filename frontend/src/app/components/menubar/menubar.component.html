@@ -1,0 +1,110 @@
+<!-- <p-sidebar
+  [visible]="sidebarVisible"
+  [dismissible]="false"
+  (onHide)="toggleSidebar()">
+  <ng-template pTemplate="header" class="p-sidebar-header-wrapper">
+    <h3>print3d</h3>
+  </ng-template>
+  <ng-template pTemplate="content">
+    
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <div class="footer-wrapper">
+      @if (!currentUser) {
+        <div class="login-register-buttons">
+          <p-button
+            label="Login"
+            icon="pi pi-sign-in"
+            severity="success"
+            size="small"
+            [raised]="true"
+            (click)="showLoginDialog()"></p-button>
+          <p-button
+            label="Register"
+            icon="pi pi-user-plus"
+            severity="primary"
+            size="small"
+            [raised]="true"
+            (click)="showRegisterDialog()"></p-button>
+        </div>
+      }
+      @if (currentUser) {
+        <div class="current-user-info">
+          <p>
+            Logged in as:
+            <b>{{ currentUser.username }}</b>
+          </p>
+          <p-button
+            label="Logout"
+            icon="pi pi-sign-out"
+            severity="danger"
+            size="small"
+            [raised]="true"
+            (click)="logoutConfirm($event)"></p-button>
+        </div>
+      }
+    </div>
+  </ng-template>
+</p-sidebar> -->
+
+<p-menubar [model]="items">
+  <ng-template pTemplate="item" let-item>
+    <ng-container *ngIf="item.route; else urlRef">
+      <a [routerLink]="item.route" class="p-menuitem-link">
+        <span [class]="item.icon"></span>
+        <span class="item-span-margin">{{ item.label }}</span>
+      </a>
+    </ng-container>
+    <ng-template #urlRef>
+      <a
+        *ngIf="item.url; else noLink"
+        [href]="item.url"
+        class="p-menuitem-link">
+        <span [class]="item.icon"></span>
+        <span class="item-span-margin">{{ item.label }}</span>
+      </a>
+    </ng-template>
+    <ng-template #noLink>
+      <div class="p-menuitem-link">
+        <span [class]="item.icon"></span>
+        <span class="item-span-margin">{{ item.label }}</span>
+        <!-- <span class="pi pi-fw pi-angle-down item-span-margin"></span> -->
+      </div>
+    </ng-template>
+  </ng-template>
+  <ng-template pTemplate="end">
+    @if (!currentUser) {
+      <div class="login-register-buttons">
+        <p-button
+          label="Login"
+          icon="pi pi-sign-in"
+          severity="success"
+          size="small"
+          (click)="showLoginDialog()"></p-button>
+        <p-button
+          label="Register"
+          icon="pi pi-user-plus"
+          severity="primary"
+          size="small"
+          (click)="showRegisterDialog()"></p-button>
+      </div>
+    }
+    @if (currentUser) {
+      <div class="current-user-info">
+        <p>
+          Logged in as:
+          <b>{{ currentUser.username }}</b>
+        </p>
+        <p-button
+          label="Logout"
+          icon="pi pi-sign-out"
+          severity="danger"
+          size="small"
+          (click)="logoutConfirm($event)"></p-button>
+      </div>
+    }
+  </ng-template>
+</p-menubar>
+
+<app-login [(visible)]="loginDialogVisible"></app-login>
+<app-register [(visible)]="registerDialogVisible"></app-register>

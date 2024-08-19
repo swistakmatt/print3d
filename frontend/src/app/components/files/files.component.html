@@ -1,0 +1,69 @@
+<div class="container">
+  <p-toolbar>
+    <ng-template pTemplate="left">
+      <div class="toolbar-left-container">
+        <p-button
+          label="Upload"
+          icon="pi pi-upload"
+          size="small"
+          (click)="openUploadDialog()" />
+        <p-button
+          severity="info"
+          label="Download"
+          icon="pi pi-download"
+          size="small"
+          (click)="downloadFile(selectedFiles[0])"
+          [disabled]="!selectedFiles.length || selectedFiles.length > 1" />
+        <p-button
+          severity="danger"
+          label="Delete"
+          icon="pi pi-trash"
+          size="small"
+          (click)="deleteFile(selectedFiles[0])"
+          [disabled]="!selectedFiles.length || selectedFiles.length > 1" />
+      </div>
+    </ng-template>
+
+    <ng-template class="toolbar-right-container" pTemplate="right">
+      <p-button
+        severity="success"
+        label="Create Item"
+        icon="pi pi-plus"
+        size="small" />
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    [value]="files"
+    [(selection)]="selectedFiles"
+    [rowHover]="true"
+    dataKey="_id"
+    [styleClass]="'p-datatable-sm p-datatable-striped'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>
+          <p-tableHeaderCheckbox />
+        </th>
+        <th>Name</th>
+        <th>Public</th>
+        <th>Size</th>
+        <th>Upload Date</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-file>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="file" />
+        </td>
+        <td>{{ file.filename }}</td>
+        <td>
+          {{ file.metadata.isPublic ? 'True' : 'False' }}
+        </td>
+        <td>{{ file.length }} bytes</td>
+        <td>{{ file.uploadDate | date: 'H:mm:ss d/M/yyyy' }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<app-upload></app-upload>

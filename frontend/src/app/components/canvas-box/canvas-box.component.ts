@@ -25,7 +25,7 @@ export class CanvasBoxComponent implements AfterViewInit {
   private camera!: THREE.PerspectiveCamera;
   private controls!: OrbitControls;
   private scene!: THREE.Scene;
-  private stats!: Stats;
+  // private stats!: Stats;
 
   constructor() {}
 
@@ -37,8 +37,8 @@ export class CanvasBoxComponent implements AfterViewInit {
     this.initLights();
     this.loadSTLModel();
 
-    this.stats = new Stats();
-    document.body.appendChild(this.stats.dom);
+    // this.stats = new Stats();
+    // document.body.appendChild(this.stats.dom);
 
     this.animate();
   }
@@ -110,7 +110,7 @@ export class CanvasBoxComponent implements AfterViewInit {
 
     const loader = new STLLoader();
 
-    loader.load('assets/models/example.stl', geometry => {
+    loader.load('assets/models/print3d.stl', geometry => {
       const mesh = new THREE.Mesh(geometry, material);
       this.updateCameraPosition(mesh);
       this.scene.add(mesh);
@@ -124,10 +124,12 @@ export class CanvasBoxComponent implements AfterViewInit {
     const maxDim = Math.max(size.x, size.y, size.z);
     const fov = this.camera.fov * (Math.PI / 180);
     let cameraZ = Math.abs(maxDim / 2 / Math.tan(fov / 2));
-    cameraZ *= 2; // Adjust camera distance
+    cameraZ *= 1.5;
     this.camera.position.set(
-      center.x + cameraZ,
-      center.y + cameraZ,
+      // center.x + cameraZ,
+      // center.y + cameraZ,
+      0,
+      0,
       center.z + cameraZ
     );
     this.camera.lookAt(center);
@@ -137,7 +139,7 @@ export class CanvasBoxComponent implements AfterViewInit {
     requestAnimationFrame(() => this.animate());
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
-    this.stats.update();
+    // this.stats.update();
   }
 
   @HostListener('window:resize', ['$event'])

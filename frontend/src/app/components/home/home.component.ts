@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { CanvasBoxComponent } from '../canvas-box/canvas-box.component';
-import { User } from '../../interfaces/User';
+import { User } from '../../types/User';
 
 @Component({
   selector: 'app-home',

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SidebarModule } from 'primeng/sidebar';
+import { MenubarModule } from 'primeng/menubar';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { LoginComponent } from '../dialogs/login/login.component';
 import { RegisterComponent } from '../dialogs/register/register.component';
-import { SidebarService } from '../../services/sidebar.service';
+import { MenubarService } from '../../services/menubar.service';
 import { AuthService } from '../../services/auth.service';
-import { User } from '../../interfaces/User';
+import { User } from '../../types/User';
 import { MenuModule } from 'primeng/menu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import {
@@ -19,11 +19,11 @@ import {
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'app-menubar',
   standalone: true,
   imports: [
     CommonModule,
-    SidebarModule,
+    MenubarModule,
     ButtonModule,
     MenuModule,
     PanelMenuModule,
@@ -31,13 +31,12 @@ import { Router } from '@angular/router';
     LoginComponent,
     RegisterComponent,
   ],
-  templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss',
+  templateUrl: './menubar.component.html',
+  styleUrl: './menubar.component.scss',
 })
-export class SidebarComponent implements OnInit {
+export class MenubarComponent implements OnInit {
   loginDialogVisible: boolean = false;
   registerDialogVisible: boolean = false;
-  sidebarVisible: boolean = false;
 
   currentUser?: User | null;
 
@@ -48,7 +47,7 @@ export class SidebarComponent implements OnInit {
     private authService: AuthService,
     private confirmationService: ConfirmationService,
     private toastService: MessageService,
-    private sidebarService: SidebarService
+    private menubarService: MenubarService
   ) {
     this.authService.currentUser.subscribe(user => {
       this.currentUser = user;
@@ -56,28 +55,67 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sidebarService.loadSidebarState();
-    this.sidebarService.sidebarVisible$.subscribe(visible => {
-      this.sidebarVisible = visible;
-    });
-    this.sidebarService.loginDialogVisible$.subscribe(visible => {
+    this.menubarService.loginDialogVisible$.subscribe(visible => {
       this.loginDialogVisible = visible;
     });
-    this.sidebarService.registerDialogVisible$.subscribe(visible => {
+    this.menubarService.registerDialogVisible$.subscribe(visible => {
       this.registerDialogVisible = visible;
     });
-  }
 
-  toggleSidebar(): void {
-    this.sidebarService.toggleSidebar();
+    this.items = [
+      {
+        label: 'Home',
+        icon: 'pi pi-home',
+        route: '/',
+      },
+      {
+        label: 'Files',
+        icon: 'pi pi-folder',
+        route: '/files',
+      },
+      {
+        label: 'Items',
+        icon: 'pi pi-box',
+        route: '/items',
+      },
+      {
+        label: 'Marketplace',
+        icon: 'pi pi-shopping-cart',
+        route: '/marketplace',
+      },
+      // {
+      //   label: 'Projects',
+      //   icon: 'pi pi-search',
+      //   items: [
+      //     {
+      //       label: 'UI Kit',
+      //       icon: 'pi pi-pencil',
+      //     },
+      //     {
+      //       label: 'Templates',
+      //       icon: 'pi pi-palette',
+      //       items: [
+      //         {
+      //           label: 'Apollo',
+      //           icon: 'pi pi-palette',
+      //         },
+      //         {
+      //           label: 'Ultima',
+      //           icon: 'pi pi-palette',
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
+    ];
   }
 
   showLoginDialog(): void {
-    this.sidebarService.toggleLoginDialog();
+    this.menubarService.toggleLoginDialog();
   }
 
   showRegisterDialog(): void {
-    this.sidebarService.toggleRegisterDialog();
+    this.menubarService.toggleRegisterDialog();
   }
 
   logoutConfirm(event: Event): void {

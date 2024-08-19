@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
-import { SidebarService } from './services/sidebar.service';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { MenubarComponent } from './components/menubar/menubar.component';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +13,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
   imports: [
     CommonModule,
     RouterOutlet,
-    SidebarComponent,
+    MenubarComponent,
     ButtonModule,
     ToastModule,
     ConfirmDialogModule,
@@ -25,16 +24,9 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 export class AppComponent {
   title = 'print3d';
 
-  constructor(
-    private primengConfig: PrimeNGConfig,
-    private sidebarService: SidebarService
-  ) {}
+  constructor(private primengConfig: PrimeNGConfig) {}
 
   ngOnInit() {
     this.primengConfig.ripple = true;
-  }
-
-  showSidebar(): void {
-    this.sidebarService.toggleSidebar();
   }
 }

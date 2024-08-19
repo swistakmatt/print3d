@@ -1,12 +1,9 @@
-<p-button
-  (click)="showSidebar()"
-  icon="pi pi-bars"
-  severity="primary"
-  class="sidebar-button"></p-button>
-
-<app-sidebar></app-sidebar>
+<div class="app-container">
+  <div class="app-menubar-wrapper">
+    <app-menubar></app-menubar>
+  </div>
+  <router-outlet></router-outlet>
+</div>
 
 <p-toast></p-toast>
 <p-confirmDialog></p-confirmDialog>
-
-<router-outlet></router-outlet>

@@ -1,0 +1,19 @@
+<p-dialog
+  [(visible)]="visible"
+  modal="true"
+  header="Upload File"
+  [closable]="true">
+  <p-fileUpload
+    mode="advanced"
+    [multiple]="false"
+    customUpload="true"
+    (onSelect)="onSelect($event)"
+    (uploadHandler)="uploadHandler($event)">
+    <ng-template pTemplate="content">
+      <div *ngIf="!fileSelected" class="upload-trigger">
+        <i class="pi pi-upload"></i>
+        <span>Drag and drop file to here to upload.</span>
+      </div>
+    </ng-template>
+  </p-fileUpload>
+</p-dialog>

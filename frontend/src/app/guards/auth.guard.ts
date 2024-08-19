@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { SidebarService } from '../services/sidebar.service';
+import { MenubarService } from '../services/menubar.service';
 import { MessageService } from 'primeng/api';
 
 export const authGuard: CanActivateFn = (
@@ -14,7 +14,7 @@ export const authGuard: CanActivateFn = (
   state: RouterStateSnapshot
 ) => {
   const authService = inject(AuthService);
-  const sidebarService = inject(SidebarService);
+  const menubarService = inject(MenubarService);
   const toastService = inject(MessageService);
   const router = inject(Router);
 
@@ -28,7 +28,7 @@ export const authGuard: CanActivateFn = (
       life: 10000,
       detail: 'You need to log in to access this page.',
     });
-    sidebarService.toggleLoginDialog();
+    menubarService.toggleLoginDialog();
     return false;
   }
 };

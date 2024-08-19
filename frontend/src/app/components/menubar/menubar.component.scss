@@ -1,0 +1,23 @@
+@import '../../../variable-colors.scss';
+
+.login-register-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+}
+
+.current-user-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  gap: 16px;
+}
+
+.item-span-margin {
+  margin: 0 0 0 0.5rem;
+}

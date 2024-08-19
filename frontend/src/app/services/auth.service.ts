@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from '../interfaces/User';
+import { User } from '../types/User';
 
 interface UserRegister {
   email: string;
@@ -17,7 +17,7 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
 
-  private API_URL = 'http://localhost:3000';
+  private API_URL = 'http://localhost:3000/auth';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -41,7 +41,7 @@ export class AuthService {
   ): Observable<User> {
     return this.http
       .post<User>(
-        `${this.API_URL}/auth/login`,
+        `${this.API_URL}/login`,
         { username, password, permanentJwt },
         this.httpOptions
       )
@@ -56,7 +56,7 @@ export class AuthService {
 
   register(user: UserRegister): Observable<User> {
     return this.http.post<User>(
-      `${this.API_URL}/auth/register`,
+      `${this.API_URL}/register`,
       user,
       this.httpOptions
     );

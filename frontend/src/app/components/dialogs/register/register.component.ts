@@ -7,7 +7,7 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../../services/auth.service';
-import { User } from '../../../interfaces/User';
+import { User } from '../../../types/User';
 import {
   FormControl,
   FormGroup,
