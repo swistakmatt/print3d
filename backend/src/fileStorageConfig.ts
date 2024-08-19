@@ -48,9 +48,11 @@ const uploadToGridFS = async (
 		const db = client.db('print3d');
 		const bucket = new GridFSBucket(db, { bucketName: 'StorageBucket' });
 
-		const uploadStream = bucket.openUploadStream(file.originalname, {
+		const filename = Buffer.from(file.originalname, 'latin1').toString('utf8');
+		const uploadStream = bucket.openUploadStream(filename, {
 			metadata,
 		});
+
 		const bufferStream = stream.Readable.from(file.buffer);
 
 		return new Promise((resolve, reject) => {

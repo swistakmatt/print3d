@@ -6,6 +6,7 @@ import {
 	getAllFiles,
 	searchFileById,
 	downloadFileById,
+	deleteFileById,
 	getFilesByOwnerId,
 } from '../controllers/fileStorage';
 
@@ -16,5 +17,6 @@ router.get('/files', authenticate, getAllFiles);
 router.get('/file/:fileId', authenticate, searchFileById);
 router.get('/files/owner/:ownerId', authenticate, getFilesByOwnerId);
 router.get('/file/download/:fileId', authenticate, downloadFileById);
+router.delete('/file/:fileId', authenticate, deleteFileById);
 
 export default router;

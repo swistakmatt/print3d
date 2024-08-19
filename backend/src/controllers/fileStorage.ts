@@ -193,7 +193,7 @@ const downloadFileById = async (req: Request, res: Response) => {
 			res.setHeader('Content-Type', 'application/octet-stream');
 			res.setHeader(
 				'Content-Disposition',
-				`attachment; filename="${file.filename}"`
+				`attachment; filename*=UTF-8''${encodeURIComponent(file.filename)}`
 			);
 		});
 
@@ -208,10 +208,40 @@ const downloadFileById = async (req: Request, res: Response) => {
 	}
 };
 
+const deleteFileById = async (req: Request, res: Response) => {
+	const client = await connectToDatabase();
+	try {
+		const { fileId } = req.params;
+
+		if (!fileId) {
+			return res.status(400).json({ error: { text: 'File ID not provided' } });
+		}
+
+		const parsedFileId = new ObjectId(fileId);
+
+		const db = client.db('print3d');
+		const bucket = new GridFSBucket(db, { bucketName: 'StorageBucket' });
+
+		const file = await bucket.find({ _id: parsedFileId }).toArray();
+
+		if (file.length === 0) {
+			return res.status(404).json({ error: { text: 'File not found' } });
+		}
+
+		await bucket.delete(parsedFileId);
+
+		res.json({ message: 'File deleted successfully' });
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ error: { text: `Unable to delete file`, error } });
+	}
+};
+
 export {
 	uploadFile,
 	getAllFiles,
 	searchFileById,
 	downloadFileById,
+	deleteFileById,
 	getFilesByOwnerId,
 };
