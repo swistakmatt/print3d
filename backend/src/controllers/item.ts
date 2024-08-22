@@ -33,6 +33,15 @@ const getItem = async (req: Request, res: Response) => {
 	}
 };
 
+const getItemsByOwnerId = async (req: Request, res: Response) => {
+	try {
+		const items = await Item.find({ user: req.params.ownerId });
+		res.json(items);
+	} catch (error) {
+		res.status(500).json({ message: error });
+	}
+};
+
 const updateItem = async (req: Request, res: Response) => {
 	try {
 		const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
@@ -59,4 +68,11 @@ const deleteItem = async (req: Request, res: Response) => {
 	}
 };
 
-export { createItem, getItems, getItem, updateItem, deleteItem };
+export {
+	createItem,
+	getItems,
+	getItem,
+	getItemsByOwnerId,
+	updateItem,
+	deleteItem,
+};
