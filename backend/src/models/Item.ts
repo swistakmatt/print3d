@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 
 const ItemSchema = new mongoose.Schema(
 	{
+		user: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User',
+			required: true,
+		},
 		name: {
 			type: String,
 			required: true,
@@ -20,6 +25,10 @@ const ItemSchema = new mongoose.Schema(
 		image: {
 			type: String,
 			trim: true,
+		},
+		isPublic: {
+			type: Boolean,
+			default: false,
 		},
 		files: [{ type: mongoose.Schema.Types.ObjectId, ref: 'File' }],
 		price: {
