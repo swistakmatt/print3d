@@ -1,0 +1,10 @@
+<p-dialog
+  [(visible)]="visible"
+  [style]="{ width: '80vw' }"
+  header="STL Preview"
+  (resizable)="(true)"
+  (onHide)="closeDialog()">
+  <ng-container *ngIf="stlFileUrl">
+    <app-canvas-box [stlFileUrl]="stlFileUrl"></app-canvas-box>
+  </ng-container>
+</p-dialog>
