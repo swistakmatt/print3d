@@ -1,11 +1,15 @@
 type Item = {
-  _id: string;
+  _id?: string;
+  user: string;
   name: string;
   description: string;
   category: string;
-  image: string;
+  isPublic?: boolean;
+  image?: string;
   files: string[];
-  price: number;
+  price?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export default Item;

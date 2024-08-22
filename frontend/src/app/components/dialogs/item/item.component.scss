@@ -1,0 +1,40 @@
+@import '../../../../variable-colors.scss';
+
+.dialog-internal-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  div label {
+    font-size: 12px;
+    font-weight: 500;
+    margin: 4px 0;
+  }
+
+  .dialog-input-row {
+    display: flex;
+
+    width: 100%;
+
+    gap: 8px;
+  }
+
+  .dialog-input {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .input-public,
+  .input-category {
+    width: 25%;
+  }
+
+  .input-price {
+    width: 50%;
+  }
+
+  .input-public p-table {
+    margin: 4px 0 0 0;
+  }
+}
