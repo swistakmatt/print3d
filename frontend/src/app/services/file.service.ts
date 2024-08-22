@@ -29,11 +29,14 @@ export class FileService {
   searchFilesByOwnerId(): Observable<any> {
     return this.http.get(
       `${this.API_URL}/files/owner/${this.authService.currentUserValue?.userId}`,
-      {
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${this.authService.currentUserValue?.token}`,
-        }),
-      }
+      this.getHttpOptions()
+    );
+  }
+
+  filterUserFiles(query: string): Observable<any> {
+    return this.http.get(
+      `${this.API_URL}/files/owner/${this.authService.currentUserValue?.userId}?query=${query}`,
+      this.getHttpOptions()
     );
   }
 
@@ -46,11 +49,22 @@ export class FileService {
     });
   }
 
+  getFileDownloadUrl(fileId: string): string {
+    return `${this.API_URL}/file/download/${fileId}`;
+  }
+
   deleteFile(fileId: string): Observable<any> {
-    return this.http.delete(`${this.API_URL}/file/${fileId}`, {
+    return this.http.delete(
+      `${this.API_URL}/file/${fileId}`,
+      this.getHttpOptions()
+    );
+  }
+
+  private getHttpOptions(): { headers: HttpHeaders } {
+    return {
       headers: new HttpHeaders({
         Authorization: `Bearer ${this.authService.currentUserValue?.token}`,
       }),
-    });
+    };
   }
 }

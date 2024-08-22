@@ -2,8 +2,9 @@
   [(visible)]="visible"
   modal="true"
   header="Upload File"
-  [closable]="true">
+  (onHide)="closeDialog()">
   <p-fileUpload
+    #fileUpload
     mode="advanced"
     [multiple]="false"
     customUpload="true"

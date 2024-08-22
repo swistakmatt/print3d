@@ -4,11 +4,14 @@ import {
   ViewChild,
   AfterViewInit,
   HostListener,
+  Input,
 } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module';
 import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-canvas-box',
@@ -18,7 +21,8 @@ import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
   styleUrl: './canvas-box.component.scss',
 })
 export class CanvasBoxComponent implements AfterViewInit {
-  @ViewChild('rendererContainer')
+  @Input() stlFileUrl!: string;
+  @ViewChild('rendererContainer', { static: true })
   rendererContainer!: ElementRef<HTMLDivElement>;
 
   private renderer!: THREE.WebGLRenderer;
@@ -27,7 +31,10 @@ export class CanvasBoxComponent implements AfterViewInit {
   private scene!: THREE.Scene;
   // private stats!: Stats;
 
-  constructor() {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   ngAfterViewInit() {
     this.initScene();
@@ -35,7 +42,7 @@ export class CanvasBoxComponent implements AfterViewInit {
     this.initRenderer();
     this.initControls();
     this.initLights();
-    this.loadSTLModel();
+    this.loadSTLModel(this.stlFileUrl);
 
     // this.stats = new Stats();
     // document.body.appendChild(this.stats.dom);
@@ -97,7 +104,9 @@ export class CanvasBoxComponent implements AfterViewInit {
     this.scene.add(hemisphereLight);
   }
 
-  private loadSTLModel() {
+  private loadSTLModel(stlFileUrl?: string) {
+    const loader = new STLLoader();
+
     const material = new THREE.MeshPhysicalMaterial({
       color: 0xb2b2b2,
       metalness: 0.7,
@@ -108,13 +117,41 @@ export class CanvasBoxComponent implements AfterViewInit {
       sheen: 0.5,
     });
 
-    const loader = new STLLoader();
+    if (stlFileUrl) {
+      const request = new XMLHttpRequest();
+      request.open('GET', stlFileUrl, true);
 
-    loader.load('assets/models/print3d.stl', geometry => {
-      const mesh = new THREE.Mesh(geometry, material);
-      this.updateCameraPosition(mesh);
-      this.scene.add(mesh);
-    });
+      request.setRequestHeader(
+        'Authorization',
+        `Bearer ${this.authService.currentUserValue?.token}`
+      );
+
+      request.responseType = 'arraybuffer';
+
+      request.onload = () => {
+        if (request.status === 200) {
+          const geometry = loader.parse(request.response);
+
+          const mesh = new THREE.Mesh(geometry, material);
+          this.updateCameraPosition(mesh);
+          this.scene.add(mesh);
+        } else {
+          console.error('Failed to load STL file:', request.statusText);
+        }
+      };
+
+      request.onerror = () => {
+        console.error('There was a network error.');
+      };
+
+      request.send();
+    } else {
+      loader.load('assets/models/print3d.stl', geometry => {
+        const mesh = new THREE.Mesh(geometry, material);
+        this.updateCameraPosition(mesh);
+        this.scene.add(mesh);
+      });
+    }
   }
 
   private updateCameraPosition(mesh: THREE.Mesh) {
@@ -128,8 +165,8 @@ export class CanvasBoxComponent implements AfterViewInit {
     this.camera.position.set(
       // center.x + cameraZ,
       // center.y + cameraZ,
-      0,
-      0,
+      center.x,
+      center.y,
       center.z + cameraZ
     );
     this.camera.lookAt(center);

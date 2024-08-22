@@ -1,6 +1,5 @@
 type FileMetadata = {
   ownerId: string;
-  isPublic: boolean;
 };
 
 type File = {

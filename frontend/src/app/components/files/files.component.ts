@@ -7,6 +7,7 @@ import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FileService } from '../../services/file.service';
 import { UploadComponent } from '../dialogs/upload/upload.component';
+import { StlPreviewComponent } from '../dialogs/stl-preview/stl-preview.component';
 import { File } from '../../types/File';
 
 @Component({
@@ -19,12 +20,14 @@ import { File } from '../../types/File';
     ToolbarModule,
     FileUploadModule,
     UploadComponent,
+    StlPreviewComponent,
   ],
   templateUrl: './files.component.html',
   styleUrl: './files.component.scss',
 })
 export class FilesComponent implements OnInit {
   @ViewChild(UploadComponent) uploadDialog!: UploadComponent;
+  @ViewChild(StlPreviewComponent) previewDialog!: StlPreviewComponent;
 
   files: File[] = [];
   selectedFiles: File[] = [];
@@ -43,6 +46,13 @@ export class FilesComponent implements OnInit {
     this.fileService.searchFilesByOwnerId().subscribe(files => {
       this.files = files;
     });
+  }
+
+  openPreviewDialog(file: File): void {
+    this.previewDialog.stlFileUrl = this.fileService.getFileDownloadUrl(
+      file._id
+    );
+    this.previewDialog.visible = true;
   }
 
   downloadFile(file: File): void {

@@ -1,16 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { HttpEventType } from '@angular/common/http';
-import { FileUploadModule } from 'primeng/fileupload';
+import { FileUploadHandlerEvent, FileUploadModule } from 'primeng/fileupload';
 import { FileService } from '../../../services/file.service';
 import { MessageService } from 'primeng/api';
-
-interface UploadEvent {
-  originalEvent: Event;
-  files: File[];
-}
 
 @Component({
   selector: 'app-upload',
@@ -20,8 +15,10 @@ interface UploadEvent {
   styleUrl: './upload.component.scss',
 })
 export class UploadComponent {
-  visible: boolean = false;
+  @Output() onUpload: EventEmitter<void> = new EventEmitter<void>();
+  @ViewChild('fileUpload') fileUpload!: any;
 
+  visible: boolean = false;
   fileSelected: boolean = false;
 
   constructor(
@@ -33,29 +30,25 @@ export class UploadComponent {
     this.fileSelected = true;
   }
 
-  uploadHandler(event: any): void {
+  uploadHandler(event: FileUploadHandlerEvent): void {
     const files = event.files;
-
     if (files && files.length > 0) {
       const file = files[0];
 
       this.fileService.uploadFile(file).subscribe({
-        next: event => {
-          if (event.type === HttpEventType.UploadProgress) {
-            const percentDone = Math.round((100 * event.loaded) / event.total!);
-            this.toastService.add({
-              severity: 'info',
-              summary: 'Upload Progress',
-              detail: `File is ${percentDone}% uploaded.`,
-            });
-          } else if (event.type === HttpEventType.Response) {
-            this.toastService.add({
-              severity: 'success',
-              summary: 'Upload Successful',
-              detail: `The file "${file.name}" has been uploaded successfully.`,
-            });
-            this.closeDialog();
-          }
+        next: response => {
+          this.toastService.add({
+            severity: 'success',
+            summary: 'Upload Successful',
+            detail: `The file "${file.name}" has been uploaded successfully.`,
+          });
+
+          this.onUpload.emit();
+
+          this.fileSelected = false;
+          this.fileUpload.clear();
+
+          this.closeDialog();
         },
         error: err => {
           console.error('Upload error:', err);
@@ -76,5 +69,7 @@ export class UploadComponent {
 
   closeDialog(): void {
     this.visible = false;
+    this.fileSelected = false;
+    this.fileUpload.clear();
   }
 }

@@ -21,6 +21,14 @@
           size="small"
           (click)="deleteFile(selectedFiles[0])"
           [disabled]="!selectedFiles.length || selectedFiles.length > 1" />
+        @if (selectedFiles[0] && selectedFiles[0].filename.endsWith('.stl')) {
+          <p-button
+            label="3D Preview"
+            icon="pi pi-eye"
+            size="small"
+            (click)="openPreviewDialog(selectedFiles[0])"
+            [disabled]="!selectedFiles.length || selectedFiles.length > 1" />
+        }
       </div>
     </ng-template>
 
@@ -38,14 +46,16 @@
     [(selection)]="selectedFiles"
     [rowHover]="true"
     dataKey="_id"
-    [styleClass]="'p-datatable-sm p-datatable-striped'">
+    [styleClass]="'p-datatable-sm p-datatable-striped'"
+    [scrollable]="true"
+    scrollDirection="vertical"
+    scrollHeight="758px">
     <ng-template pTemplate="header">
       <tr>
         <th>
           <p-tableHeaderCheckbox />
         </th>
         <th>Name</th>
-        <th>Public</th>
         <th>Size</th>
         <th>Upload Date</th>
       </tr>
@@ -56,9 +66,6 @@
           <p-tableCheckbox [value]="file" />
         </td>
         <td>{{ file.filename }}</td>
-        <td>
-          {{ file.metadata.isPublic ? 'True' : 'False' }}
-        </td>
         <td>{{ file.length }} bytes</td>
         <td>{{ file.uploadDate | date: 'H:mm:ss d/M/yyyy' }}</td>
       </tr>
@@ -66,4 +73,5 @@
   </p-table>
 </div>
 
-<app-upload></app-upload>
+<app-upload (onUpload)="loadFiles()"></app-upload>
+<app-stl-preview></app-stl-preview>
