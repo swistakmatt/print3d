@@ -3,12 +3,13 @@ import http from 'http';
 import mongoose from 'mongoose';
 import { Application, Request, Response } from 'express';
 import { applyPassportStrategy } from './passportConfig';
-import { configureExpressMiddlewares } from './middlewares';
+import { configureExpressMiddlewares } from './middlewares/middlewares';
 
 import authRoutes from './routes/auth';
 import filesRoutes from './routes/fileStorage';
 import itemRoutes from './routes/item';
 import orderRoutes from './routes/order';
+import supportRoutes from './routes/support';
 
 const express = require('express');
 
@@ -29,6 +30,7 @@ app.use('/auth', authRoutes);
 app.use('/storage', filesRoutes);
 app.use('/items', itemRoutes);
 app.use('/orders', orderRoutes);
+app.use('/support', supportRoutes);
 
 const mongoUser = process.env.DB_USER;
 const mongoPass = process.env.DB_PASSWORD;

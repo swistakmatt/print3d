@@ -1,0 +1,23 @@
+@import '../../../../variable-colors.scss';
+
+.dialog-internal-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  div label {
+    font-size: 12px;
+    font-weight: 500;
+    margin: 4px 0;
+  }
+}
+
+.dialog-input {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+textarea {
+  resize: vertical;
+}

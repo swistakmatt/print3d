@@ -3,7 +3,17 @@
     <app-menubar></app-menubar>
   </div>
   <router-outlet></router-outlet>
+  <p-button
+    icon="pi pi-question"
+    [outlined]="true"
+    [rounded]="true"
+    severity="secondary"
+    size="small"
+    class="support-button"
+    (click)="showSupportDialog()"></p-button>
 </div>
+
+<app-support></app-support>
 
 <p-toast></p-toast>
 <p-confirmDialog></p-confirmDialog>

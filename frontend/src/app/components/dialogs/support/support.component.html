@@ -1,0 +1,36 @@
+<p-dialog
+  [(visible)]="visible"
+  modal="true"
+  header="Support Request"
+  [closable]="true"
+  [style]="{ width: '50vw' }"
+  (onHide)="closeDialog()">
+  <div class="p-fluid dialog-internal-wrapper">
+    <div class="p-field dialog-input">
+      <label for="email">Email*</label>
+      <input id="email" type="email" pInputText [(ngModel)]="email" />
+    </div>
+
+    <div class="p-field dialog-input">
+      <label for="title">Title*</label>
+      <input id="title" type="text" pInputText [(ngModel)]="title" />
+    </div>
+
+    <div class="p-field dialog-input">
+      <label for="message">Message*</label>
+      <textarea id="message" pInputTextarea [(ngModel)]="message"></textarea>
+    </div>
+  </div>
+
+  <p-footer>
+    <p-button
+      label="Cancel"
+      icon="pi pi-times"
+      (click)="closeDialog()"
+      class="p-button-text"></p-button>
+    <p-button
+      label="Submit"
+      icon="pi pi-check"
+      (click)="submitSupportRequest()"></p-button>
+  </p-footer>
+</p-dialog>
