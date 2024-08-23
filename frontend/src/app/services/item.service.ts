@@ -24,6 +24,13 @@ export class ItemService {
     return this.http.get<Item[]>(`${this.API_URL}`, this.getHttpOptions());
   }
 
+  getPublicItems(): Observable<Item[]> {
+    return this.http.get<Item[]>(
+      `${this.API_URL}/public`,
+      this.getHttpOptions()
+    );
+  }
+
   getItemById(id: string): Observable<Item> {
     return this.http.get<Item>(`${this.API_URL}/${id}`, this.getHttpOptions());
   }

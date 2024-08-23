@@ -1,1 +1,54 @@
 @import '../../../variable-colors.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  height: calc(100vh - 92.4px);
+
+  box-sizing: border-box;
+
+  margin: 92.4px 0 0 0;
+  padding: 8px 16px;
+
+  .header {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    gap: 20px;
+
+    .grid-item {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .list-layout {
+    display: flex;
+    flex-direction: column;
+
+    padding: 0 16px;
+  }
+
+  .item-card {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 8px;
+
+    padding: 8px;
+  }
+}
