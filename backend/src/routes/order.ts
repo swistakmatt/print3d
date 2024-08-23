@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from '../passportConfig';
+import { isAdmin } from '../middlewares/isAdmin';
 import {
 	createOrder,
 	getOrders,
