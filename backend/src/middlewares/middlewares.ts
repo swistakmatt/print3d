@@ -20,7 +20,7 @@ export function configureExpressMiddlewares(app: Application) {
 	app.use(helmet());
 
 	const accessLogStream = fs.createWriteStream(
-		path.join(__dirname, 'access.log'),
+		path.join(__dirname, '../access.log'),
 		{ flags: 'a' }
 	);
 
