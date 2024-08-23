@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 
 import Item from '../models/Item';
 
@@ -15,6 +15,15 @@ const createItem = async (req: Request, res: Response) => {
 const getItems = async (req: Request, res: Response) => {
 	try {
 		const items = await Item.find();
+		res.json(items);
+	} catch (error) {
+		res.status(500).json({ message: error });
+	}
+};
+
+const getPublicItems = async (req: Request, res: Response) => {
+	try {
+		const items = await Item.find({ isPublic: true });
 		res.json(items);
 	} catch (error) {
 		res.status(500).json({ message: error });
@@ -71,6 +80,7 @@ const deleteItem = async (req: Request, res: Response) => {
 export {
 	createItem,
 	getItems,
+	getPublicItems,
 	getItem,
 	getItemsByOwnerId,
 	updateItem,

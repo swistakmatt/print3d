@@ -4,6 +4,7 @@ import { isAdmin } from '../middlewares/isAdmin';
 import {
 	createItem,
 	getItems,
+	getPublicItems,
 	getItem,
 	getItemsByOwnerId,
 	updateItem,
@@ -14,6 +15,7 @@ const itemRoutes = Router();
 
 itemRoutes.post('/', authenticate, createItem);
 itemRoutes.get('/', authenticate, isAdmin, getItems);
+itemRoutes.get('/public', getPublicItems);
 itemRoutes.get('/:id', authenticate, getItem);
 itemRoutes.get('/owner/:ownerId', authenticate, getItemsByOwnerId);
 itemRoutes.put('/:id', authenticate, updateItem);
