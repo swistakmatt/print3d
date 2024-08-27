@@ -1,5 +1,5 @@
 import { Observable, BehaviorSubject } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import Item from '../types/Item';
@@ -29,6 +29,16 @@ export class ItemService {
       `${this.API_URL}/public`,
       this.getHttpOptions()
     );
+  }
+
+  filterPublicItems(searchQuery: string = ''): Observable<Item[]> {
+    let params = new HttpParams();
+
+    if (searchQuery) {
+      params = params.set('search', searchQuery);
+    }
+
+    return this.http.get<Item[]>(`${this.API_URL}/public`, { params });
   }
 
   getItemById(id: string): Observable<Item> {
