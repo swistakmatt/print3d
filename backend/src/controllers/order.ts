@@ -21,9 +21,18 @@ const getOrders = async (req: Request, res: Response) => {
 	}
 };
 
+const getUserOrders = async (req: Request, res: Response) => {
+	try {
+		const orders = await Order.find({ user: req.params.userId });
+		res.json(orders);
+	} catch (error) {
+		res.status(500).json({ message: error });
+	}
+};
+
 const getOrder = async (req: Request, res: Response) => {
 	try {
-		const order = await Order.findById(req.params.id);
+		const order = await Order.findById(req.params.id).populate('items');
 		if (!order) {
 			return res.status(404).json({ message: 'Order not found.' });
 		}
@@ -59,4 +68,11 @@ const deleteOrder = async (req: Request, res: Response) => {
 	}
 };
 
-export { createOrder, getOrders, getOrder, updateOrder, deleteOrder };
+export {
+	createOrder,
+	getOrders,
+	getUserOrders,
+	getOrder,
+	updateOrder,
+	deleteOrder,
+};
