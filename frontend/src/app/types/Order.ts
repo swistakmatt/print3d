@@ -1,10 +1,15 @@
+import Item from './Item';
+
 type Order = {
-  _id: string;
+  _id?: string;
   user: string;
-  items: string[];
+  items: Item[];
+  filament_color: string;
+  filament_type: string;
   total: number;
   status: string;
-  payment: string;
+  payment_method: string;
+  payment_status: string;
   address: string;
   city: string;
   postalCode: string;
@@ -12,7 +17,7 @@ type Order = {
   phone: string;
   tracking?: string;
   deliveredAt?: Date;
-  createdAt: Date;
+  createdAt?: Date;
 };
 
 export default Order;
