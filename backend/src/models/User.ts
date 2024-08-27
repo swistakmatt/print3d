@@ -28,6 +28,18 @@ const UserSchema = new mongoose.Schema(
 			trim: true,
 			minlength: 12,
 		},
+		firstName: {
+			type: String,
+			trim: true,
+			minlength: 2,
+			maxlength: 30,
+		},
+		lastName: {
+			type: String,
+			trim: true,
+			minlength: 2,
+			maxlength: 30,
+		},
 		phone: {
 			type: String,
 			trim: true,
