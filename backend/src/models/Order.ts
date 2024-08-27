@@ -14,6 +14,14 @@ const OrderSchema = new mongoose.Schema(
 				required: true,
 			},
 		],
+		filament_type: {
+			type: String,
+			required: true,
+		},
+		filament_color: {
+			type: String,
+			required: true,
+		},
 		total: {
 			type: Number,
 			required: true,
@@ -21,13 +29,19 @@ const OrderSchema = new mongoose.Schema(
 		status: {
 			type: String,
 			required: true,
-			enum: ['Pending', 'Processing', 'Shipped', 'Delivered'],
-			default: 'Pending',
+			enum: ['processing', 'confirmed', 'shipped', 'delivered', 'cancelled'],
+			default: 'processing',
 		},
-		payment: {
+		payment_method: {
 			type: String,
 			required: true,
 			enum: ['Debit Card', 'PayPal', 'BLIK', 'Bank Transfer'],
+		},
+		payment_status: {
+			type: String,
+			required: true,
+			enum: ['processing', 'requires_action', 'succeeded', 'failed'],
+			default: 'processing',
 		},
 		address: {
 			type: String,
