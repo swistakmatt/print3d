@@ -30,6 +30,29 @@ const getPublicItems = async (req: Request, res: Response) => {
 	}
 };
 
+const filterPublicItems = async (req: Request, res: Response) => {
+	try {
+		const { search = '' } = req.query;
+
+		const items = await Item.aggregate([
+			{ $match: { isPublic: true, name: { $regex: search, $options: 'i' } } },
+			{
+				$addFields: {
+					priceExists: {
+						$cond: { if: { $gt: ['$price', null] }, then: 1, else: 0 },
+					},
+				},
+			},
+			{ $sort: { priceExists: -1, name: 1 } },
+			{ $project: { priceExists: 0 } },
+		]);
+
+		res.json(items);
+	} catch (error) {
+		res.status(500).json({ message: 'Error fetching public items' });
+	}
+};
+
 const getItem = async (req: Request, res: Response) => {
 	try {
 		const item = await Item.findById(req.params.id);
@@ -81,6 +104,7 @@ export {
 	createItem,
 	getItems,
 	getPublicItems,
+	filterPublicItems,
 	getItem,
 	getItemsByOwnerId,
 	updateItem,

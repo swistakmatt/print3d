@@ -5,6 +5,7 @@ import {
 	createItem,
 	getItems,
 	getPublicItems,
+	filterPublicItems,
 	getItem,
 	getItemsByOwnerId,
 	updateItem,
@@ -15,7 +16,7 @@ const itemRoutes = Router();
 
 itemRoutes.post('/', authenticate, createItem);
 itemRoutes.get('/', authenticate, isAdmin, getItems);
-itemRoutes.get('/public', getPublicItems);
+itemRoutes.get('/public', filterPublicItems);
 itemRoutes.get('/:id', authenticate, getItem);
 itemRoutes.get('/owner/:ownerId', authenticate, getItemsByOwnerId);
 itemRoutes.put('/:id', authenticate, updateItem);
