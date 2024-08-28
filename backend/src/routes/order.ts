@@ -4,6 +4,7 @@ import { isAdmin } from '../middlewares/isAdmin';
 import {
 	createOrder,
 	getOrders,
+	searchOrders,
 	getUserOrders,
 	getOrder,
 	updateOrder,
@@ -14,6 +15,7 @@ const orderRoutes = Router();
 
 orderRoutes.post('/', authenticate, createOrder);
 orderRoutes.get('/', authenticate, isAdmin, getOrders);
+orderRoutes.get('/search/:query', authenticate, isAdmin, searchOrders);
 orderRoutes.get('/user/:userId', authenticate, getUserOrders);
 orderRoutes.get('/:id', authenticate, getOrder);
 orderRoutes.put('/:id', authenticate, isAdmin, updateOrder);

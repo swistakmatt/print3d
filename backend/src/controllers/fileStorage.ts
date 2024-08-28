@@ -52,6 +52,36 @@ const getAllFiles = async (req: Request, res: Response) => {
 	}
 };
 
+const searchFiles = async (req: Request, res: Response) => {
+	const client = await connectToDatabase();
+	try {
+		const { query } = req.params;
+
+		if (!query) {
+			return res.status(400).json({ error: { text: 'Query not provided' } });
+		}
+
+		const searchCriteria: any = {
+			$or: [
+				{ filename: { $regex: query, $options: 'i' } },
+				{ 'metadata.customField': { $regex: query, $options: 'i' } },
+			],
+		};
+
+		const db = client.db('print3d');
+		const bucket = new GridFSBucket(db, { bucketName: 'StorageBucket' });
+
+		const files = await bucket.find(searchCriteria).toArray();
+
+		res.json(files);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: 'Error fetching files' });
+	} finally {
+		closeDatabaseConnection(client);
+	}
+};
+
 const getFilesByOwnerId = async (req: Request, res: Response) => {
 	const client = await connectToDatabase();
 	try {
@@ -104,7 +134,7 @@ const filterUserFiles = async (req: Request, res: Response) => {
 	}
 };
 
-const searchFileById = async (req: Request, res: Response) => {
+const getFileById = async (req: Request, res: Response) => {
 	const client = await connectToDatabase();
 	try {
 		const { fileId } = req.params;
@@ -211,7 +241,8 @@ const deleteFileById = async (req: Request, res: Response) => {
 export {
 	uploadFile,
 	getAllFiles,
-	searchFileById,
+	searchFiles,
+	getFileById,
 	filterUserFiles,
 	downloadFileById,
 	deleteFileById,

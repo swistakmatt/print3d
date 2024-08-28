@@ -21,6 +21,22 @@ const getOrders = async (req: Request, res: Response) => {
 	}
 };
 
+const searchOrders = async (req: Request, res: Response) => {
+	try {
+		const { query } = req.params;
+
+		const orders = await Order.find({
+			$or: [
+				{ status: { $regex: query, $options: 'i' } },
+				{ payment_status: { $regex: query, $options: 'i' } },
+			],
+		});
+		res.json(orders);
+	} catch (error) {
+		res.status(500).json({ message: error });
+	}
+};
+
 const getUserOrders = async (req: Request, res: Response) => {
 	try {
 		const orders = await Order.find({ user: req.params.userId });
@@ -71,6 +87,7 @@ const deleteOrder = async (req: Request, res: Response) => {
 export {
 	createOrder,
 	getOrders,
+	searchOrders,
 	getUserOrders,
 	getOrder,
 	updateOrder,

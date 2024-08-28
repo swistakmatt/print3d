@@ -30,6 +30,24 @@ const getSupportRequests = async (req: Request, res: Response) => {
 	}
 };
 
+const searchSupportRequests = async (req: Request, res: Response) => {
+	try {
+		const { query } = req.params;
+
+		const supportRequests = await Support.find({
+			$or: [
+				{ email: { $regex: query, $options: 'i' } },
+				{ title: { $regex: query, $options: 'i' } },
+				{ message: { $regex: query, $options: 'i' } },
+			],
+		});
+		res.json(supportRequests);
+	} catch (error) {
+		console.error('Error fetching support requests:', error);
+		res.status(500).json({ message: 'Failed to fetch support requests' });
+	}
+};
+
 const getSupportRequestById = async (req: Request, res: Response) => {
 	try {
 		const supportRequest = await Support.findById(req.params.id).populate(
@@ -66,6 +84,7 @@ const resolveSupportRequest = async (req: Request, res: Response) => {
 export {
 	createSupportRequest,
 	getSupportRequests,
+	searchSupportRequests,
 	getSupportRequestById,
 	resolveSupportRequest,
 };

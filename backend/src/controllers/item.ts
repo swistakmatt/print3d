@@ -1,4 +1,4 @@
-import e, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 
 import Item from '../models/Item';
 
@@ -50,6 +50,22 @@ const filterPublicItems = async (req: Request, res: Response) => {
 		res.json(items);
 	} catch (error) {
 		res.status(500).json({ message: 'Error fetching public items' });
+	}
+};
+
+const searchItems = async (req: Request, res: Response) => {
+	try {
+		const { query } = req.params;
+
+		const items = await Item.find({
+			$or: [
+				{ name: { $regex: query, $options: 'i' } },
+				{ description: { $regex: query, $options: 'i' } },
+			],
+		});
+		res.json(items);
+	} catch (error) {
+		res.status(500).json({ message: error });
 	}
 };
 
@@ -105,6 +121,7 @@ export {
 	getItems,
 	getPublicItems,
 	filterPublicItems,
+	searchItems,
 	getItem,
 	getItemsByOwnerId,
 	updateItem,

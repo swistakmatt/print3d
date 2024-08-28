@@ -5,7 +5,8 @@ import { isAdmin } from '../middlewares/isAdmin';
 import {
 	uploadFile,
 	getAllFiles,
-	searchFileById,
+	searchFiles,
+	getFileById,
 	downloadFileById,
 	filterUserFiles,
 	deleteFileById,
@@ -16,7 +17,8 @@ const router = Router();
 
 router.post('/upload', authenticate, upload.single('file'), uploadFile);
 router.get('/files', authenticate, isAdmin, getAllFiles);
-router.get('/file/:fileId', authenticate, isAdmin, searchFileById);
+router.get('/search/:query', authenticate, isAdmin, searchFiles);
+router.get('/file/:fileId', authenticate, getFileById);
 router.get('/files/owner/:ownerId', authenticate, filterUserFiles);
 router.get('/file/download/:fileId', authenticate, downloadFileById);
 router.delete('/file/:fileId', authenticate, deleteFileById);

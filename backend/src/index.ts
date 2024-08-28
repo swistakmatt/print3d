@@ -10,6 +10,7 @@ import filesRoutes from './routes/fileStorage';
 import itemRoutes from './routes/item';
 import orderRoutes from './routes/order';
 import supportRoutes from './routes/support';
+import userRoutes from './routes/user';
 
 const express = require('express');
 
@@ -31,6 +32,7 @@ app.use('/storage', filesRoutes);
 app.use('/items', itemRoutes);
 app.use('/orders', orderRoutes);
 app.use('/support', supportRoutes);
+app.use('/users', userRoutes);
 
 const mongoUser = process.env.DB_USER;
 const mongoPass = process.env.DB_PASSWORD;
