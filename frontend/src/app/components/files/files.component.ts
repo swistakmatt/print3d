@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -7,7 +8,6 @@ import { FileUploadModule, UploadEvent } from 'primeng/fileupload';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FileService } from '../../services/file.service';
 import { UploadComponent } from '../dialogs/upload/upload.component';
-import { StlPreviewComponent } from '../dialogs/stl-preview/stl-preview.component';
 import { File } from '../../types/File';
 
 @Component({
@@ -20,14 +20,12 @@ import { File } from '../../types/File';
     ToolbarModule,
     FileUploadModule,
     UploadComponent,
-    StlPreviewComponent,
   ],
   templateUrl: './files.component.html',
   styleUrl: './files.component.scss',
 })
 export class FilesComponent implements OnInit {
   @ViewChild(UploadComponent) uploadDialog!: UploadComponent;
-  @ViewChild(StlPreviewComponent) previewDialog!: StlPreviewComponent;
 
   files: File[] = [];
   selectedFiles: File[] = [];
@@ -35,7 +33,8 @@ export class FilesComponent implements OnInit {
   constructor(
     private fileService: FileService,
     private confirmationService: ConfirmationService,
-    private toastService: MessageService
+    private toastService: MessageService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -48,11 +47,15 @@ export class FilesComponent implements OnInit {
     });
   }
 
-  openPreviewDialog(file: File): void {
-    this.previewDialog.stlFileUrl = this.fileService.getFileDownloadUrl(
-      file._id
-    );
-    this.previewDialog.visible = true;
+  openPreview(file: File): void {
+    const stlFileUrl = this.fileService.getFileDownloadUrl(file._id);
+    this.router.navigate(['/stl-preview'], {
+      queryParams: {
+        url: stlFileUrl,
+        fileId: file._id,
+        ownerId: file.metadata.ownerId,
+      },
+    });
   }
 
   downloadFile(file: File): void {

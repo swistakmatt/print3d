@@ -1,0 +1,36 @@
+<ng-container *ngIf="stlFileUrl">
+  <div class="stl-file-data">
+    @if (!loadingFileDetails && !loadingUser) {
+      <span class="stl-file-owner">
+        <span class="data-key">Owner:</span>
+        {{ user?.username }}
+      </span>
+      <span class="stl-file-name">
+        <span class="data-key">Name:</span>
+        {{ file?.filename }}
+      </span>
+      <span class="stl-file-size">
+        <span class="data-key">Size:</span>
+        {{ file?.length }} bytes
+      </span>
+      <span class="stl-file-upload-date">
+        <span class="data-key">Uploaded At:</span>
+        {{ file?.uploadDate | date: 'H:mm:ss d/M/yyyy' }}
+      </span>
+      <p-button
+        *ngIf="file"
+        severity="info"
+        label="Download"
+        icon="pi pi-download"
+        size="small"
+        (click)="downloadFile(file)" />
+    }
+    @if (loadingFileDetails || loadingUser) {
+      <p-progressSpinner ariaLabel="loading" />
+    }
+  </div>
+  <app-canvas-box [stlFileUrl]="stlFileUrl"></app-canvas-box>
+</ng-container>
+<ng-container *ngIf="!stlFileUrl">
+  <div class="container">No file selected for preview.</div>
+</ng-container>

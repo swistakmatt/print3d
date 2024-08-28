@@ -26,6 +26,20 @@ export class FileService {
     });
   }
 
+  getFileById(fileId: string): Observable<any> {
+    return this.http.get(
+      `${this.API_URL}/file/${fileId}`,
+      this.getHttpOptions()
+    );
+  }
+
+  searchFiles(query: string): Observable<any> {
+    return this.http.get(
+      `${this.API_URL}/search/${query}`,
+      this.getHttpOptions()
+    );
+  }
+
   searchFilesByOwnerId(): Observable<any> {
     return this.http.get(
       `${this.API_URL}/files/owner/${this.authService.currentUserValue?.userId}`,

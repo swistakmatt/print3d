@@ -26,7 +26,7 @@
             label="3D Preview"
             icon="pi pi-eye"
             size="small"
-            (click)="openPreviewDialog(selectedFiles[0])"
+            (click)="openPreview(selectedFiles[0])"
             [disabled]="!selectedFiles.length || selectedFiles.length > 1" />
         }
       </div>
@@ -74,4 +74,3 @@
 </div>
 
 <app-upload (onUpload)="loadFiles()"></app-upload>
-<app-stl-preview></app-stl-preview>
