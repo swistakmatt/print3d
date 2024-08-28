@@ -1,0 +1,26 @@
+<div class="container">
+  <p-dataView id="marketplace-dataView" [value]="orders" [layout]="'list'">
+    <ng-template pTemplate="list" let-items>
+      <div class="list-layout">
+        <div *ngFor="let order of orders" class="list-item">
+          <div class="order-details">
+            <span class="order-id">Order ID: {{ order._id }}</span>
+            <span class="order-date">
+              Order Date: {{ order.createdAt | date }}
+            </span>
+            <span class="order-total">
+              Total: {{ order.total | currency: 'PLN' }}
+            </span>
+            <span class="order-status">Status: {{ order.status }}</span>
+            <div class="order-details-footer">
+              <p-button
+                icon="pi pi-eye"
+                [rounded]="true"
+                (click)="viewOrderDetails(order._id!)" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-dataView>
+</div>

@@ -1,0 +1,37 @@
+<div class="container">
+  <div *ngIf="order">
+    <h2>Order Details</h2>
+
+    <div>
+      <h3>Order ID: {{ order._id }}</h3>
+      <p>Status: {{ order.status }}</p>
+      <p>Filament Type: {{ order.filament_type }}</p>
+      <p>Filament Color: {{ order.filament_color }}</p>
+      <p>Total: {{ order.total | currency: 'PLN' }}</p>
+      <p>Payment Method: {{ order.payment_method }}</p>
+      <p>Payment Status: {{ order.payment_status }}</p>
+    </div>
+
+    <div>
+      <h3>Shipping Information</h3>
+      <p>
+        {{ order.address }}, {{ order.city }}, {{ order.postalCode }},
+        {{ order.country }}
+      </p>
+      <p>Phone: {{ order.phone }}</p>
+    </div>
+
+    <div>
+      <h3>Items in this order:</h3>
+      <ul>
+        <li *ngFor="let item of order.items">
+          {{ item.name }} - {{ item.price | currency }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div *ngIf="!order">
+    <p>Loading order details...</p>
+  </div>
+</div>
