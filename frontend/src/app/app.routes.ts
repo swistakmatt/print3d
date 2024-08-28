@@ -7,6 +7,10 @@ import { MarketplaceComponent } from './components/marketplace/marketplace.compo
 import { FilesComponent } from './components/files/files.component';
 import { ItemsComponent } from './components/items/items.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { OrderComponent } from './components/order/order.component';
+import { OrdersComponent } from './components/orders/orders.component';
+import { StlPreviewComponent } from './components/stl-preview/stl-preview.component';
+import { ShoppingCartComponent } from './components/shopping-cart/shopping-cart.component';
 
 export const routes: Routes = [
   {
@@ -33,10 +37,34 @@ export const routes: Routes = [
     title: 'Files - print3d',
   },
   {
+    path: 'stl-preview',
+    component: StlPreviewComponent,
+    canActivate: [authGuard],
+    title: 'STL Preview - print3d',
+  },
+  {
     path: 'items',
     component: ItemsComponent,
     canActivate: [authGuard],
     title: 'Items - print3d',
+  },
+  {
+    path: 'order/:id',
+    component: OrderComponent,
+    canActivate: [authGuard],
+    title: 'Order - print3d',
+  },
+  {
+    path: 'orders',
+    component: OrdersComponent,
+    canActivate: [authGuard],
+    title: 'Orders - print3d',
+  },
+  {
+    path: 'shopping-cart',
+    component: ShoppingCartComponent,
+    canActivate: [authGuard],
+    title: 'Shopping Cart - print3d',
   },
   {
     path: 'admin',

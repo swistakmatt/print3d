@@ -80,9 +80,20 @@ export class MenubarComponent implements OnInit {
       },
       {
         label: 'Marketplace',
-        icon: 'pi pi-shopping-cart',
+        icon: 'pi pi-shop',
         route: '/marketplace',
       },
+      {
+        label: 'Orders',
+        icon: 'pi pi-shopping-bag',
+        route: '/orders',
+      },
+      {
+        label: 'Profile',
+        icon: 'pi pi-user',
+        route: '/profile',
+      },
+
       // {
       //   label: 'Projects',
       //   icon: 'pi pi-search',
