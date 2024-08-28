@@ -87,6 +87,25 @@ export class OrderService {
     );
   }
 
+  updateOrderStatus(orderId: string, status: string): Observable<any> {
+    return this.http.patch(
+      `${this.API_URL}/${orderId}`,
+      { status },
+      this.getHttpOptions()
+    );
+  }
+
+  getAllOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(this.API_URL, this.getHttpOptions());
+  }
+
+  searchOrders(query: string): Observable<Order[]> {
+    return this.http.get<Order[]>(
+      `${this.API_URL}/search/${query}`,
+      this.getHttpOptions()
+    );
+  }
+
   getUserOrders(): Observable<Order[]> {
     const userId = this.authService.currentUserValue?.userId;
     return this.http.get<Order[]>(
