@@ -1,1 +1,247 @@
-<p>admin works!</p>
+<div class="container">
+  <p-tabMenu [model]="menuItems" [(activeItem)]="activeItem"></p-tabMenu>
+
+  <p-toolbar>
+    <ng-template pTemplate="left">
+      <div class="toolbar-left-container">
+        <input
+          type="text"
+          pInputText
+          placeholder="Search"
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()" />
+
+        <p-button
+          icon="pi pi-times"
+          [rounded]="true"
+          [text]="true"
+          (click)="onClear()"></p-button>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="right"></ng-template>
+  </p-toolbar>
+
+  <div *ngIf="activeItem?.label === 'Files'">
+    <p-table
+      [value]="files"
+      [(selection)]="selectedFiles"
+      [rowHover]="true"
+      dataKey="_id"
+      [styleClass]="'p-datatable-sm p-datatable-striped'"
+      [scrollable]="true"
+      scrollDirection="vertical"
+      scrollHeight="672px">
+      >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <p-tableHeaderCheckbox />
+          </th>
+          <th>_id</th>
+          <th>Chunk Size</th>
+          <th>Name</th>
+          <th>Size</th>
+          <th>Upload Date</th>
+          <th>Metadata</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-file>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="file" />
+          </td>
+          <td>{{ file._id }}</td>
+          <td>{{ file.chunkSize }} bytes</td>
+          <td>{{ file.filename }}</td>
+          <td>{{ file.length }} bytes</td>
+          <td>{{ file.uploadDate | date: 'short' }}</td>
+          <td>{{ file.metadata }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div *ngIf="activeItem?.label === 'Items'">
+    <p-table
+      [value]="items"
+      [(selection)]="selectedItems"
+      [rowHover]="true"
+      dataKey="_id"
+      [styleClass]="'p-datatable-sm p-datatable-striped'"
+      [scrollable]="true"
+      scrollDirection="vertical"
+      scrollHeight="758px">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <p-tableHeaderCheckbox />
+          </th>
+          <th>_id</th>
+          <th>Owner</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>isPublic</th>
+          <th>Files</th>
+          <th>Price</th>
+          <th>Created At</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="item" />
+          </td>
+          <td>{{ item._id }}</td>
+          <td>{{ item.user }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.category }}</td>
+          <td>{{ item.isPublic ?? '' }}</td>
+          <td>{{ item.files }}</td>
+          <td>{{ (item.price | currency: 'PLN') ?? '' }}</td>
+          <td>{{ (item.createdAt | date: 'short') ?? '' }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div *ngIf="activeItem?.label === 'Orders'">
+    <p-table
+      [value]="orders"
+      [(selection)]="selectedOrders"
+      [rowHover]="true"
+      dataKey="_id"
+      [styleClass]="'p-datatable-sm p-datatable-striped'"
+      [scrollable]="true"
+      scrollDirection="vertical"
+      scrollHeight="758px">
+      >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <p-tableHeaderCheckbox />
+          </th>
+          <th>_id</th>
+          <th>Owner</th>
+          <th>Items</th>
+          <th>Total Price</th>
+          <th>Status</th>
+          <th>Payment Status</th>
+          <th>Created At</th>
+          <th>Delivered At</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-order>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="order" />
+          </td>
+          <td>{{ order._id }}</td>
+          <td>{{ order.user }}</td>
+          <td>{{ order.items }}</td>
+          <td>{{ order.totalPrice | currency: 'PLN' }}</td>
+          <td>{{ order.status }}</td>
+          <td>{{ order.paymentStatus }}</td>
+          <td>{{ (order.createdAt | date: 'short') ?? '' }}</td>
+          <td>{{ (order.deliveredAt | date: 'short') ?? '' }}</td>
+          <!-- <td>
+            <select (change)="updateOrderStatus(order, $event.target.value)">
+              <option
+                *ngFor="
+                  let status of [
+                    'Pending',
+                    'Processing',
+                    'Shipped',
+                    'Delivered',
+                  ]
+                "
+                [value]="status"
+                [selected]="order.status === status">
+                {{ status }}
+              </option>
+            </select>
+          </td> -->
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div *ngIf="activeItem?.label === 'Support Requests'">
+    <p-table
+      [value]="supports"
+      [(selection)]="selectedSupports"
+      [rowHover]="true"
+      dataKey="_id"
+      [styleClass]="'p-datatable-sm p-datatable-striped'"
+      [scrollable]="true"
+      scrollDirection="vertical"
+      scrollHeight="758px">
+      >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <p-tableHeaderCheckbox />
+          </th>
+          <th>_id</th>
+          <th>Reporter</th>
+          <th>Rep. Email</th>
+          <th>Title</th>
+          <th>Message</th>
+          <th>Created At</th>
+          <th>Status</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-support>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="support" />
+          </td>
+          <td>{{ support._id }}</td>
+          <td>{{ support.userId ?? '' }}</td>
+          <td>{{ support.email }}</td>
+          <td>{{ support.title }}</td>
+          <td>{{ support.message }}</td>
+          <td>{{ (support.createdAt | date: 'short') ?? '' }}</td>
+          <td>{{ support.resolved ? 'true' : 'false' }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <div *ngIf="activeItem?.label === 'Users'">
+    <p-table
+      [value]="users"
+      [(selection)]="selectedUsers"
+      [rowHover]="true"
+      dataKey="_id"
+      [styleClass]="'p-datatable-sm p-datatable-striped'"
+      [scrollable]="true"
+      scrollDirection="vertical"
+      scrollHeight="758px">
+      >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>
+            <p-tableHeaderCheckbox />
+          </th>
+          <th>_id</th>
+          <th>isAdmin</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Phone</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="user" />
+          </td>
+          <td>{{ user._id }}</td>
+          <td>{{ user.admin }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phone ?? '' }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
