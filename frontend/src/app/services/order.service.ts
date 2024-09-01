@@ -121,6 +121,21 @@ export class OrderService {
     );
   }
 
+  updateOrder(orderId: string, orderData: Partial<Order>): Observable<Order> {
+    return this.http.put<Order>(
+      `${this.API_URL}/${orderId}`,
+      orderData,
+      this.getHttpOptions()
+    );
+  }
+
+  deleteOrder(orderId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.API_URL}/${orderId}`,
+      this.getHttpOptions()
+    );
+  }
+
   private getHttpOptions(): { headers: HttpHeaders } {
     return {
       headers: new HttpHeaders({

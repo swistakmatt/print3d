@@ -35,6 +35,21 @@ export class SupportService {
     );
   }
 
+  resolveSupportRequest(id: string): Observable<SupportRequest> {
+    return this.http.put<SupportRequest>(
+      `${this.API_URL}/${id}/resolve/`,
+      {},
+      this.getHttpOptions()
+    );
+  }
+
+  deleteSupportRequest(id: string): Observable<SupportRequest> {
+    return this.http.delete<SupportRequest>(
+      `${this.API_URL}/${id}`,
+      this.getHttpOptions()
+    );
+  }
+
   private getHttpOptions(): { headers: HttpHeaders } {
     return {
       headers: new HttpHeaders({
