@@ -102,6 +102,9 @@
     padding: 16px;
 
     width: 60%;
+    height: 100%;
+
+    overflow-y: auto;
 
     #marketplace-dataView {
       display: flex;
