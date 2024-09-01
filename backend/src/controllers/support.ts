@@ -81,10 +81,24 @@ const resolveSupportRequest = async (req: Request, res: Response) => {
 	}
 };
 
+const deleteSupportRequest = async (req: Request, res: Response) => {
+	try {
+		const supportRequest = await Support.findByIdAndDelete(req.params.id);
+		if (!supportRequest) {
+			return res.status(404).json({ message: 'Support request not found' });
+		}
+		res.json(supportRequest);
+	} catch (error) {
+		console.error('Error deleting support request:', error);
+		res.status(500).json({ message: 'Failed to delete support request' });
+	}
+};
+
 export {
 	createSupportRequest,
 	getSupportRequests,
 	searchSupportRequests,
 	getSupportRequestById,
 	resolveSupportRequest,
+	deleteSupportRequest,
 };
