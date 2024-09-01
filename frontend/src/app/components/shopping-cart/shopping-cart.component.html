@@ -1,24 +1,68 @@
 <div *ngIf="cartItems.length > 0; else emptyCart" class="container">
-  <div class="form-wrapper">
-    <form (ngSubmit)="placeOrder()">
+  <form class="form-wrapper" (ngSubmit)="placeOrder()">
+    <div class="filament-options-container">
+      <p-dropdown
+        [options]="filament_type_options"
+        [(ngModel)]="filament_type"
+        [showClear]="true"
+        placeholder="Choose a Filament Type"
+        styleClass="{'width':'100%'}"
+        name="filament_type"></p-dropdown>
+
+      <p-dropdown
+        [options]="filament_color_options"
+        [(ngModel)]="filament_color"
+        [showClear]="true"
+        placeholder="Choose a Filament Color"
+        styleClass="{'width':'100%'}"
+        name="filament_color"></p-dropdown>
+    </div>
+
+    <div class="name-options-container">
       <p-floatLabel>
         <input
-          id="filament_type"
+          id="name"
           type="text"
           pInputText
-          [(ngModel)]="filament_type"
-          name="filament_type" />
-        <label for="filament_type">Filament Type</label>
+          name="first_name"
+          styleClass="{'width':'100%'}" />
+        <label for="name">First Name</label>
       </p-floatLabel>
+
       <p-floatLabel>
         <input
-          id="filament_color"
+          id="last_name"
           type="text"
           pInputText
-          [(ngModel)]="filament_color"
-          name="filament_color" />
-        <label for="filament_color">Filament Color</label>
+          name="last_name"
+          styleClass="{'width':'100%'}" />
+        <label for="last_name">Last Name</label>
       </p-floatLabel>
+    </div>
+
+    <div class="comms-options-container">
+      <p-floatLabel>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          name="email"
+          styleClass="{'width':'100%'}" />
+        <label for="email">Email</label>
+      </p-floatLabel>
+
+      <p-floatLabel>
+        <p-inputMask
+          mask="(+99) 999 999 999"
+          [(ngModel)]="phone"
+          id="phone"
+          name="phone"
+          styleClass="{'width':'100%'}" />
+        <label for="phone">Phone</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="address-options-container">
       <p-floatLabel>
         <input
           id="address"
@@ -28,69 +72,67 @@
           name="address" />
         <label for="address">Address</label>
       </p-floatLabel>
-      <p-floatLabel>
-        <input
-          id="city"
-          type="text"
-          pInputText
-          [(ngModel)]="city"
-          name="city" />
-        <label for="city">City</label>
-      </p-floatLabel>
-      <p-floatLabel>
-        <p-inputMask
-          mask="99-999"
-          [(ngModel)]="postalCode"
-          id="postalCode"
-          name="postalCode" />
-        <label for="postalCode">Postal Code</label>
-      </p-floatLabel>
-      <!-- <p-floatLabel>
-        <input
-          id="country"
-          type="text"
-          pInputText
-          [(ngModel)]="selectedCountry"
-          name="country" />
-        <label for="country">Country</label>
-      </p-floatLabel> -->
+
+      <div class="city-postal-options-container">
+        <p-floatLabel>
+          <input
+            id="city"
+            type="text"
+            pInputText
+            [(ngModel)]="city"
+            name="city" />
+          <label for="city">City</label>
+        </p-floatLabel>
+
+        <p-floatLabel>
+          <p-inputMask
+            mask="99-999"
+            [(ngModel)]="postalCode"
+            id="postalCode"
+            name="postalCode" />
+          <label for="postalCode">Postal Code</label>
+        </p-floatLabel>
+      </div>
+
       <p-dropdown
         [options]="countries"
         [(ngModel)]="selectedCountry"
         [showClear]="true"
         placeholder="Select a Country"
         name="country"></p-dropdown>
-      <p-floatLabel>
-        <p-inputMask
-          mask="(+99) 999 999 999"
-          [(ngModel)]="phone"
-          id="phone"
-          name="phone" />
-        <label for="phone">Phone</label>
-      </p-floatLabel>
+    </div>
 
-      <!-- <select [(ngModel)]="paymentMethod" name="paymentMethod">
-        <option value="Debit Card">Debit Card</option>
-        <option value="PayPal">PayPal</option>
-        <option value="BLIK">BLIK</option>
-        <option value="Bank Transfer">Bank Transfer</option>
-      </select>
-
-      <div class="p-field dialog-input">
-        <label for="paymentMethod">Category*</label>
-        <select
-          id="paymentMethod"
-          [(ngModel)]="paymentMethod"
-          class="p-inputtext p-component">
-          <option *ngFor="let category of categories" [value]="category">
-            {{ category }}
-          </option>
-        </select>
-      </div> -->
-
-      <button type="submit">Place Order</button>
-    </form>
-  </div>
+    <div class="payment-methods">
+      <p-button
+        class="button-bank-transfer"
+        outlined="true"
+        type="submit"
+        severity="contrast">
+        <img src="assets/svg/bank-transfer-logo.svg" alt="Bank Transfer" />
+      </p-button>
+      <p-button
+        class="button-blik"
+        outlined="true"
+        type="submit"
+        severity="contrast">
+        <img src="assets/svg/blik-logo.svg" alt="BLIK" />
+      </p-button>
+      <p-button
+        class="button-paypal"
+        outlined="true"
+        type="submit"
+        severity="contrast">
+        <img src="assets/svg/paypal-logo.svg" alt="PayPal" />
+      </p-button>
+      <p-button
+        class="button-debit"
+        outlined="true"
+        type="submit"
+        severity="contrast">
+        <img src="assets/svg/debit-card-logo.svg" alt="Debit Card" />
+      </p-button>
+    </div>
+  </form>
 
   <p-divider layout="vertical"></p-divider>
 

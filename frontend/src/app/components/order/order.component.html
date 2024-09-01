@@ -1,37 +1,80 @@
 <div class="container">
-  <div *ngIf="order">
-    <h2>Order Details</h2>
-
-    <div>
-      <h3>Order ID: {{ order._id }}</h3>
-      <p>Status: {{ order.status }}</p>
-      <p>Filament Type: {{ order.filament_type }}</p>
-      <p>Filament Color: {{ order.filament_color }}</p>
-      <p>Total: {{ order.total | currency: 'PLN' }}</p>
-      <p>Payment Method: {{ order.payment_method }}</p>
-      <p>Payment Status: {{ order.payment_status }}</p>
+  <div class="order" *ngIf="order">
+    <div class="order-details">
+      <span class="order-date">
+        {{ order.createdAt | date: 'H:mm d MMM yyyy' }}
+      </span>
+      <div class="order-status">
+        Status:
+        <span>{{ toCapitalCase(order.status) }}</span>
+      </div>
+      <div>Filament Type: {{ order.filament_type }}</div>
+      <div>Filament Color: {{ order.filament_color }}</div>
+      <div class="order-total">
+        Total:
+        <span>{{ order.total | currency: 'PLN' }}</span>
+      </div>
+      <div class="order-payment-status">
+        Payment Method:
+        <span>{{ toCapitalCase(order.payment_method) }}</span>
+      </div>
+      <div class="order-payment-status">
+        Payment:
+        <span>{{ toCapitalCase(order.payment_status) }}</span>
+      </div>
     </div>
 
-    <div>
-      <h3>Shipping Information</h3>
-      <p>
-        {{ order.address }}, {{ order.city }}, {{ order.postalCode }},
-        {{ order.country }}
-      </p>
-      <p>Phone: {{ order.phone }}</p>
+    <p-divider class="divider" layout="vertical"></p-divider>
+
+    <div class="order-shipping">
+      <div class="order-shipping-details">
+        <div>{{ order.address }}</div>
+        <div>{{ order.city }}, {{ order.postalCode }}</div>
+        <div>{{ order.country }}</div>
+      </div>
+      <div class="order-shipping-phone">
+        Phone:
+        <span>{{ order.phone }}</span>
+      </div>
     </div>
 
-    <div>
-      <h3>Items in this order:</h3>
-      <ul>
+    <p-divider class="divider" layout="vertical"></p-divider>
+
+    <div class="order-items">
+      <p-dataView
+        id="marketplace-dataView"
+        [value]="order.items"
+        [layout]="'list'">
+        <ng-template pTemplate="list" let-items>
+          <div class="list-layout">
+            <div *ngFor="let item of order.items" class="list-item">
+              @if (!item.image) {
+                <div class="image-placeholder"></div>
+              } @else {
+                <p-image src="{{ item.image }}" alt="Image" width="128" />
+              }
+              <div class="item-details">
+                <span class="item-category">{{ item.category }}</span>
+                <span class="item-title">{{ item.name }}</span>
+                <div class="item-details-footer">
+                  <span class="item-price">
+                    {{ item.price | currency: 'PLN' }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <!-- <ul>
         <li *ngFor="let item of order.items">
           {{ item.name }} - {{ item.price | currency }}
         </li>
-      </ul>
+      </ul> -->
+      </p-dataView>
     </div>
   </div>
 
   <div *ngIf="!order">
-    <p>Loading order details...</p>
+    <p>Order not found!</p>
   </div>
 </div>

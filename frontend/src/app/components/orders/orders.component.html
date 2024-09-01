@@ -4,20 +4,24 @@
       <div class="list-layout">
         <div *ngFor="let order of orders" class="list-item">
           <div class="order-details">
-            <span class="order-id">Order ID: {{ order._id }}</span>
             <span class="order-date">
-              Order Date: {{ order.createdAt | date }}
+              {{ order.createdAt | date: 'H:mm d MMM yyyy' }}
             </span>
-            <span class="order-total">
-              Total: {{ order.total | currency: 'PLN' }}
-            </span>
-            <span class="order-status">Status: {{ order.status }}</span>
-            <div class="order-details-footer">
-              <p-button
-                icon="pi pi-eye"
-                [rounded]="true"
-                (click)="viewOrderDetails(order._id!)" />
+            <div class="order-status">
+              Status:
+              <span>{{ toCapitalCase(order.status) }}</span>
             </div>
+            <div class="order-total">
+              Total:
+              <span>{{ order.total | currency: 'PLN' }}</span>
+            </div>
+            <div class="order-payment-status">
+              Payment:
+              <span>{{ toCapitalCase(order.payment_status) }}</span>
+            </div>
+          </div>
+          <div class="order-view-details">
+            <p-button (click)="viewOrderDetails(order._id!)">Details</p-button>
           </div>
         </div>
       </div>

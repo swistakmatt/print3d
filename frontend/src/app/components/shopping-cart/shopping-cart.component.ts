@@ -39,6 +39,22 @@ export class ShoppingCartComponent implements OnInit {
   cartItems: CartItem[] = [];
   filament_color: string = '';
   filament_type: string = '';
+  filament_type_options: string[] = [
+    'PLA',
+    'ABS',
+    'PETG',
+    'TPU',
+    'Carbon Fiber',
+    'Nylon',
+  ];
+  filament_color_options: string[] = [
+    'Black',
+    'White',
+    'Red',
+    'Blue',
+    'Green',
+    'Yellow',
+  ];
   address: string = '';
   city: string = '';
   postalCode: string = '';

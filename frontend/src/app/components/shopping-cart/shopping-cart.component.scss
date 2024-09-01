@@ -11,6 +11,91 @@
   margin: 92.4px 0 0 0;
   padding: 8px 16px;
 
+  .form-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    gap: 24px;
+
+    .filament-options-container {
+      display: flex;
+      flex-direction: row;
+
+      gap: 16px;
+
+      justify-content: space-between;
+    }
+
+    .name-options-container {
+      display: flex;
+      flex-direction: row;
+
+      gap: 16px;
+
+      * {
+        width: 100%;
+      }
+    }
+
+    .comms-options-container {
+      display: flex;
+      flex-direction: row;
+
+      gap: 16px;
+
+      * {
+        width: 100%;
+      }
+    }
+
+    .address-options-container {
+      display: flex;
+      flex-direction: column;
+
+      gap: 24px;
+
+      .city-postal-options-container {
+        display: flex;
+        flex-direction: row;
+
+        gap: 16px;
+      }
+
+      * {
+        width: 100%;
+      }
+    }
+
+    .payment-methods {
+      display: flex;
+      flex-direction: row;
+
+      gap: 8px;
+      box-sizing: border-box;
+
+      .button-blik,
+      .button-paypal,
+      .button-debit,
+      .button-bank-transfer {
+        width: 25%;
+
+        img {
+          height: 48px;
+        }
+      }
+
+      ::ng-deep .p-button {
+        display: flex;
+        flex-direction: row;
+
+        align-items: center;
+        justify-content: center;
+
+        width: 100%;
+      }
+    }
+  }
+
   .cart-total {
     display: flex;
     flex-direction: row;
@@ -126,8 +211,9 @@
   justify-content: center;
   align-items: center;
 
+  font-size: 48px;
+  font-weight: 500;
   color: $secondary;
-  font-size: 64px;
 
   height: calc(100vh - 92.4px);
   width: 100%;
