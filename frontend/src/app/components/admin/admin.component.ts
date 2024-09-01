@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TabMenuModule } from 'primeng/tabmenu';
@@ -11,7 +12,7 @@ import { ItemService } from '../../services/item.service';
 import { OrderService } from '../../services/order.service';
 import { SupportService } from '../../services/support.service';
 import { UserService } from '../../services/user.service';
-import { ConfirmationService, MessageService, MenuItem } from 'primeng/api';
+import { ItemComponent } from '../dialogs/item/item.component';
 import { File } from '../../types/File';
 import Item from '../../types/Item';
 import Order from '../../types/Order';
@@ -29,11 +30,14 @@ import { User } from '../../types/User';
     InputTextModule,
     FormsModule,
     ButtonModule,
+    ItemComponent,
   ],
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent implements OnInit {
+  @ViewChild(ItemComponent) itemDialog!: ItemComponent;
+
   menuItems: MenuItem[] | undefined;
   activeItem: MenuItem | undefined;
 
@@ -122,11 +126,19 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  deleteItem(itemId: string): void {
+  openCreateItemDialog(): void {
+    this.itemDialog.open();
+  }
+
+  openEditItemDialog(item: Item): void {
+    this.itemDialog.open(item);
+  }
+
+  deleteItem(item: Item): void {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this item?',
       accept: () => {
-        this.itemService.deleteItem(itemId).subscribe(() => {
+        this.itemService.deleteItem(item._id!).subscribe(() => {
           this.loadItems();
           this.toastService.add({
             severity: 'success',
@@ -138,16 +150,66 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  deleteFile(fileId: string): void {
+  deleteFile(file: File): void {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this file?',
       accept: () => {
-        this.fileService.deleteFile(fileId).subscribe(() => {
+        this.fileService.deleteFile(file._id).subscribe(() => {
           this.loadFiles();
           this.toastService.add({
             severity: 'success',
             summary: 'Success',
             detail: 'File deleted successfully.',
+          });
+        });
+      },
+    });
+  }
+
+  deleteOrder(order: Order): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this order?',
+      accept: () => {
+        this.orderService.deleteOrder(order._id!).subscribe(() => {
+          this.loadOrders();
+          this.toastService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Order deleted successfully.',
+          });
+        });
+      },
+    });
+  }
+
+  resolveSupport(support: Support): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to resolve this support request?',
+      accept: () => {
+        this.supportService
+          .resolveSupportRequest(support._id!)
+          .subscribe(() => {
+            this.loadSupports();
+            this.toastService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Support request resolved successfully.',
+            });
+          });
+      },
+    });
+  }
+
+  deleteSupport(support: Support): void {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this support request?',
+      accept: () => {
+        this.supportService.deleteSupportRequest(support._id!).subscribe(() => {
+          this.loadSupports();
+          this.toastService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'Support request deleted successfully.',
           });
         });
       },

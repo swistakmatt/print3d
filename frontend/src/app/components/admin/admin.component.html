@@ -18,7 +18,66 @@
           (click)="onClear()"></p-button>
       </div>
     </ng-template>
-    <ng-template pTemplate="right"></ng-template>
+    <ng-template pTemplate="right">
+      <div class="toolbar-right-container">
+        @if (activeItem?.label === 'Files') {
+          <p-button
+            severity="danger"
+            label="Delete"
+            icon="pi pi-trash"
+            size="small"
+            (click)="deleteFile(selectedFiles[0])"
+            [disabled]="!selectedFiles.length || selectedFiles.length > 1" />
+        } @else if (activeItem?.label === 'Items') {
+          <p-button
+            label="Create Item"
+            icon="pi pi-plus"
+            size="small"
+            (click)="openCreateItemDialog()" />
+
+          <p-button
+            label="Edit Item"
+            icon="pi pi-pencil"
+            size="small"
+            (click)="openEditItemDialog(selectedItems[0])"
+            [disabled]="!selectedItems.length || selectedItems.length > 1" />
+
+          <p-button
+            severity="danger"
+            label="Delete"
+            icon="pi pi-trash"
+            size="small"
+            (click)="deleteItem(selectedItems[0])"
+            [disabled]="!selectedItems.length || selectedItems.length > 1" />
+        } @else if (activeItem?.label === 'Orders') {
+          <p-button
+            severity="danger"
+            label="Delete"
+            icon="pi pi-trash"
+            size="small"
+            (click)="deleteOrder(selectedOrders[0])"
+            [disabled]="!selectedOrders.length || selectedOrders.length > 1" />
+        } @else if (activeItem?.label === 'Support Requests') {
+          <p-button
+            label="Resolve"
+            icon="pi pi-check"
+            size="small"
+            (click)="resolveSupport(selectedSupports[0])"
+            [disabled]="
+              !selectedSupports.length || selectedSupports.length > 1
+            " />
+          <p-button
+            severity="danger"
+            label="Delete"
+            icon="pi pi-trash"
+            size="small"
+            (click)="deleteSupport(selectedSupports[0])"
+            [disabled]="
+              !selectedSupports.length || selectedSupports.length > 1
+            " />
+        }
+      </div>
+    </ng-template>
   </p-toolbar>
 
   <div *ngIf="activeItem?.label === 'Files'">
@@ -54,7 +113,7 @@
           <td>{{ file.chunkSize }} bytes</td>
           <td>{{ file.filename }}</td>
           <td>{{ file.length }} bytes</td>
-          <td>{{ file.uploadDate | date: 'short' }}</td>
+          <td>{{ file.uploadDate | date: 'H:mm d/M/yyyy' }}</td>
           <td>{{ file.metadata }}</td>
         </tr>
       </ng-template>
@@ -98,7 +157,7 @@
           <td>{{ item.isPublic ?? '' }}</td>
           <td>{{ item.files }}</td>
           <td>{{ (item.price | currency: 'PLN') ?? '' }}</td>
-          <td>{{ (item.createdAt | date: 'short') ?? '' }}</td>
+          <td>{{ (item.createdAt | date: 'H:mm d/M/yyyy') ?? '' }}</td>
         </tr>
       </ng-template>
     </p-table>
@@ -141,8 +200,8 @@
           <td>{{ order.totalPrice | currency: 'PLN' }}</td>
           <td>{{ order.status }}</td>
           <td>{{ order.paymentStatus }}</td>
-          <td>{{ (order.createdAt | date: 'short') ?? '' }}</td>
-          <td>{{ (order.deliveredAt | date: 'short') ?? '' }}</td>
+          <td>{{ (order.createdAt | date: 'H:mm d/M/yyyy') ?? '' }}</td>
+          <td>{{ (order.deliveredAt | date: 'H:mm d/M/yyyy') ?? '' }}</td>
           <!-- <td>
             <select (change)="updateOrderStatus(order, $event.target.value)">
               <option
@@ -187,7 +246,7 @@
           <th>Title</th>
           <th>Message</th>
           <th>Created At</th>
-          <th>Status</th>
+          <th>isResolved</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-support>
@@ -200,7 +259,7 @@
           <td>{{ support.email }}</td>
           <td>{{ support.title }}</td>
           <td>{{ support.message }}</td>
-          <td>{{ (support.createdAt | date: 'short') ?? '' }}</td>
+          <td>{{ (support.createdAt | date: 'H:mm d/M/yyyy') ?? '' }}</td>
           <td>{{ support.resolved ? 'true' : 'false' }}</td>
         </tr>
       </ng-template>
@@ -245,3 +304,5 @@
     </p-table>
   </div>
 </div>
+
+<app-item (onItemSaved)="loadItems()"></app-item>
