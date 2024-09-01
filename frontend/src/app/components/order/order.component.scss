@@ -186,4 +186,20 @@
       }
     }
   }
+
+  .order-not-found {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    height: calc(100vh - 92.4px - 16px);
+
+    box-sizing: border-box;
+
+    font-size: 48px;
+    font-weight: 500;
+    color: $secondary;
+  }
 }
