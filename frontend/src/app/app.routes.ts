@@ -18,12 +18,12 @@ export const routes: Routes = [
     component: HomeComponent,
     title: 'Home - print3d',
   },
-  {
-    path: 'profile',
-    component: ProfileComponent,
-    canActivate: [authGuard],
-    title: 'Profile - print3d',
-  },
+  // {
+  //   path: 'profile',
+  //   component: ProfileComponent,
+  //   canActivate: [authGuard],
+  //   title: 'Profile - print3d',
+  // },
   {
     path: 'marketplace',
     component: MarketplaceComponent,

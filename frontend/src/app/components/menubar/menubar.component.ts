@@ -88,35 +88,10 @@ export class MenubarComponent implements OnInit {
         icon: 'pi pi-shopping-bag',
         route: '/orders',
       },
-      {
-        label: 'Profile',
-        icon: 'pi pi-user',
-        route: '/profile',
-      },
-
       // {
-      //   label: 'Projects',
-      //   icon: 'pi pi-search',
-      //   items: [
-      //     {
-      //       label: 'UI Kit',
-      //       icon: 'pi pi-pencil',
-      //     },
-      //     {
-      //       label: 'Templates',
-      //       icon: 'pi pi-palette',
-      //       items: [
-      //         {
-      //           label: 'Apollo',
-      //           icon: 'pi pi-palette',
-      //         },
-      //         {
-      //           label: 'Ultima',
-      //           icon: 'pi pi-palette',
-      //         },
-      //       ],
-      //     },
-      //   ],
+      //   label: 'Profile',
+      //   icon: 'pi pi-user',
+      //   route: '/profile',
       // },
     ];
   }
