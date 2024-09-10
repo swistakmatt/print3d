@@ -25,3 +25,12 @@
   align-items: center;
   gap: 8px;
 }
+
+.order-payment-status span {
+  padding: 4px 8px;
+  border-radius: 4px;
+  box-sizing: border-box;
+
+  color: $white;
+  background-color: $success;
+}

@@ -30,6 +30,13 @@
             [disabled]="!selectedFiles.length || selectedFiles.length > 1" />
         } @else if (activeItem?.label === 'Items') {
           <p-button
+            label="Unset Prices"
+            severity="warning"
+            icon="pi pi-eye"
+            size="small"
+            (click)="filterUnsetPrices()" />
+
+          <p-button
             label="Create Item"
             icon="pi pi-plus"
             size="small"
@@ -173,7 +180,6 @@
       [scrollable]="true"
       scrollDirection="vertical"
       scrollHeight="758px">
-      >
       <ng-template pTemplate="header">
         <tr>
           <th>
@@ -196,29 +202,22 @@
           </td>
           <td>{{ order._id }}</td>
           <td>{{ order.user }}</td>
-          <td>{{ order.items }}</td>
-          <td>{{ order.totalPrice | currency: 'PLN' }}</td>
-          <td>{{ order.status }}</td>
-          <td>{{ order.paymentStatus }}</td>
-          <td>{{ (order.createdAt | date: 'H:mm d/M/yyyy') ?? '' }}</td>
-          <td>{{ (order.deliveredAt | date: 'H:mm d/M/yyyy') ?? '' }}</td>
-          <!-- <td>
-            <select (change)="updateOrderStatus(order, $event.target.value)">
-              <option
-                *ngFor="
-                  let status of [
-                    'Pending',
-                    'Processing',
-                    'Shipped',
-                    'Delivered',
-                  ]
-                "
-                [value]="status"
-                [selected]="order.status === status">
-                {{ status }}
-              </option>
-            </select>
-          </td> -->
+          <td>{{ getOrdersItems(order) }}</td>
+          <td>{{ order.total | currency: 'PLN' }}</td>
+          <td>
+            <p-dropdown
+              [options]="orderStatuses"
+              [(ngModel)]="order.status"
+              (onChange)="updateOrderStatus(order)"
+              placeholder="Select Status"></p-dropdown>
+          </td>
+          <td>
+            <div class="order-payment-status">
+              <span>{{ toCapitalCase(order.payment_status) }}</span>
+            </div>
+          </td>
+          <td>{{ (order.createdAt | date: 'H:mm d/M/yyyy') ?? 'Unset' }}</td>
+          <td>{{ (order.deliveredAt | date: 'H:mm d/M/yyyy') ?? 'Unset' }}</td>
         </tr>
       </ng-template>
     </p-table>
@@ -255,7 +254,7 @@
             <p-tableCheckbox [value]="support" />
           </td>
           <td>{{ support._id }}</td>
-          <td>{{ support.userId ?? '' }}</td>
+          <td>{{ support.user ?? 'Unregistered' }}</td>
           <td>{{ support.email }}</td>
           <td>{{ support.title }}</td>
           <td>{{ support.message }}</td>

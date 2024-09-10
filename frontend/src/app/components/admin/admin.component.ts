@@ -6,6 +6,7 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { FileService } from '../../services/file.service';
 import { ItemService } from '../../services/item.service';
@@ -30,6 +31,7 @@ import { User } from '../../types/User';
     InputTextModule,
     FormsModule,
     ButtonModule,
+    DropdownModule,
     ItemComponent,
   ],
   templateUrl: './admin.component.html',
@@ -73,12 +75,12 @@ export class AdminComponent implements OnInit {
       },
       {
         label: 'Items',
-        icon: 'pi pi-fw pi-list',
+        icon: 'pi pi-fw pi-box',
         command: () => this.loadItems(),
       },
       {
         label: 'Orders',
-        icon: 'pi pi-fw pi-shopping-cart',
+        icon: 'pi pi-fw pi-shopping-bag',
         command: () => this.loadOrders(),
       },
       {
@@ -114,6 +116,14 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  getOrdersItems(order: Order): string {
+    const uniqueItemNames = Array.from(
+      new Set(order.items.map(item => item.name))
+    );
+
+    return uniqueItemNames.join(', ');
+  }
+
   loadSupports(): void {
     this.supportService.getSupportRequests().subscribe(supports => {
       this.supports = supports;
@@ -132,6 +142,10 @@ export class AdminComponent implements OnInit {
 
   openEditItemDialog(item: Item): void {
     this.itemDialog.open(item);
+  }
+
+  filterUnsetPrices(): void {
+    this.items = this.items.filter(item => !item.price);
   }
 
   deleteItem(item: Item): void {
@@ -216,14 +230,30 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  updateOrderStatus(order: Order, status: string): void {
-    this.orderService.updateOrderStatus(order._id!, status).subscribe(() => {
-      this.loadOrders();
-      this.toastService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Order status updated successfully.',
-      });
+  orderStatuses = [
+    { label: 'Processing', value: 'processing' },
+    { label: 'Confirmed', value: 'confirmed' },
+    { label: 'Shipped', value: 'shipped' },
+    { label: 'Delivered', value: 'delivered' },
+    { label: 'Cancelled', value: 'cancelled' },
+  ];
+
+  updateOrderStatus(order: Order): void {
+    this.orderService.updateOrderStatus(order._id!, order.status).subscribe({
+      next: () => {
+        this.toastService.add({
+          severity: 'success',
+          summary: 'Status Updated',
+          detail: `Order status updated to ${order.status}`,
+        });
+      },
+      error: err => {
+        this.toastService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to update order status',
+        });
+      },
     });
   }
 
@@ -268,6 +298,10 @@ export class AdminComponent implements OnInit {
         });
         break;
     }
+  }
+
+  toCapitalCase(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   onTabChange(event: any): void {

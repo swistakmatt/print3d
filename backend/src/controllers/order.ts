@@ -14,7 +14,11 @@ const createOrder = async (req: Request, res: Response) => {
 
 const getOrders = async (req: Request, res: Response) => {
 	try {
-		const orders = await Order.find();
+		const orders = await Order.find().populate('items');
+		if (!orders) {
+			return res.status(404).json({ message: 'Orders not found.' });
+		}
+
 		res.json(orders);
 	} catch (error) {
 		res.status(500).json({ message: error });
@@ -39,7 +43,13 @@ const searchOrders = async (req: Request, res: Response) => {
 
 const getUserOrders = async (req: Request, res: Response) => {
 	try {
-		const orders = await Order.find({ user: req.params.userId });
+		const orders = await Order.find({ user: req.params.userId }).populate(
+			'items'
+		);
+		if (!orders) {
+			return res.status(404).json({ message: 'Orders not found.' });
+		}
+
 		res.json(orders);
 	} catch (error) {
 		res.status(500).json({ message: error });

@@ -2,11 +2,10 @@ import { Request, Response } from 'express';
 
 import Support from '../models/Support';
 
-// Create a new support request
 const createSupportRequest = async (req: Request, res: Response) => {
 	try {
 		const supportRequest = new Support({
-			user: req.user,
+			user: req.body.userId,
 			email: req.body.email,
 			title: req.body.title,
 			message: req.body.message,
@@ -22,7 +21,7 @@ const createSupportRequest = async (req: Request, res: Response) => {
 
 const getSupportRequests = async (req: Request, res: Response) => {
 	try {
-		const supportRequests = await Support.find().populate('user', 'email');
+		const supportRequests = await Support.find();
 		res.json(supportRequests);
 	} catch (error) {
 		console.error('Error fetching support requests:', error);

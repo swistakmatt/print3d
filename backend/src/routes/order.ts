@@ -18,7 +18,7 @@ orderRoutes.get('/', authenticate, isAdmin, getOrders);
 orderRoutes.get('/search/:query', authenticate, isAdmin, searchOrders);
 orderRoutes.get('/user/:userId', authenticate, getUserOrders);
 orderRoutes.get('/:id', authenticate, getOrder);
-orderRoutes.put('/:id', authenticate, isAdmin, updateOrder);
+orderRoutes.patch('/:id', authenticate, isAdmin, updateOrder);
 orderRoutes.delete('/:id', authenticate, isAdmin, deleteOrder);
 
 export default orderRoutes;

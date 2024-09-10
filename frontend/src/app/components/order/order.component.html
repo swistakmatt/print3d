@@ -4,6 +4,10 @@
       <span class="order-date">
         {{ order.createdAt | date: 'H:mm d MMM yyyy' }}
       </span>
+      <div>
+        ID:
+        <span class="order-id">{{ order._id }}</span>
+      </div>
       <div class="order-status">
         Status:
         <span>{{ toCapitalCase(order.status) }}</span>

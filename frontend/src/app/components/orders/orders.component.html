@@ -4,9 +4,18 @@
       <div class="list-layout">
         <div *ngFor="let order of orders" class="list-item">
           <div class="order-details">
-            <span class="order-date">
-              {{ order.createdAt | date: 'H:mm d MMM yyyy' }}
-            </span>
+            <div class="order-row">
+              <span class="order-date">
+                {{ order.createdAt | date: 'H:mm d MMM yyyy' }}
+              </span>
+              <p-divider layout="vertical"></p-divider>
+              <div>
+                ID:
+                <span class="order-id">{{ order._id }}</span>
+              </div>
+              <p-divider layout="vertical"></p-divider>
+              <span class="order-summary">{{ getOrderTitle(order) }}</span>
+            </div>
             <div class="order-status">
               Status:
               <span>{{ toCapitalCase(order.status) }}</span>

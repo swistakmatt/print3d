@@ -70,7 +70,7 @@ export class MenubarComponent implements OnInit {
       },
       {
         label: 'Files',
-        icon: 'pi pi-folder',
+        icon: 'pi pi-file',
         route: '/files',
       },
       {
@@ -80,7 +80,7 @@ export class MenubarComponent implements OnInit {
       },
       {
         label: 'Marketplace',
-        icon: 'pi pi-shop',
+        icon: 'pi pi-shopping-cart',
         route: '/marketplace',
       },
       {

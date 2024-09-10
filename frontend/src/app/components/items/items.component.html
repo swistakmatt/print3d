@@ -23,6 +23,20 @@
           [disabled]="!selectedItems.length || selectedItems.length > 1" />
       </div>
     </ng-template>
+    <ng-template pTemplate="right">
+      <div class="toolbar-right-container">
+        <p-button
+          label="Add to Cart"
+          icon="pi pi-shopping-cart"
+          size="small"
+          (click)="addToCart(selectedItems[0])"
+          [disabled]="
+            !selectedItems.length ||
+            selectedItems.length > 1 ||
+            !selectedItems[0].price
+          " />
+      </div>
+    </ng-template>
   </p-toolbar>
 
   <p-table

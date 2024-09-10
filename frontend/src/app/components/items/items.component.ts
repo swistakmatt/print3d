@@ -4,6 +4,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ItemService } from '../../services/item.service';
+import { OrderService } from '../../services/order.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ItemComponent } from '../dialogs/item/item.component';
 import Item from '../../types/Item';
@@ -29,6 +30,7 @@ export class ItemsComponent implements OnInit {
 
   constructor(
     private itemService: ItemService,
+    private orderService: OrderService,
     private toastService: MessageService,
     private confirmationService: ConfirmationService
   ) {}
@@ -73,6 +75,14 @@ export class ItemsComponent implements OnInit {
           },
         });
       },
+    });
+  }
+
+  addToCart(item: Item): void {
+    this.orderService.addItemToCart(item);
+    this.toastService.add({
+      severity: 'success',
+      detail: `${item.name} added to Cart`,
     });
   }
 }

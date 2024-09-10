@@ -112,7 +112,7 @@ export class ShoppingCartComponent implements OnInit {
       total: this.getTotalPrice(),
       status: 'processing',
       payment_method: this.paymentMethod,
-      payment_status: 'processing',
+      payment_status: 'succeeded',
       address: this.address,
       city: this.city,
       postalCode: this.postalCode,

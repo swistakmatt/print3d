@@ -53,6 +53,27 @@
         gap: 16px;
         padding: 16px;
 
+        .order-row {
+          display: flex;
+          flex-direction: row;
+          gap: 16px;
+
+          height: fit-content;
+
+          align-items: center;
+
+          .order-id {
+            font-weight: 500;
+            color: $dark;
+          }
+        }
+
+        .order-summary {
+          font-size: 14px;
+          font-weight: 500;
+          color: $dark;
+        }
+
         .order-total span {
           font-weight: 600;
         }
@@ -97,4 +118,8 @@
   font-size: 48px;
   font-weight: 500;
   color: $secondary;
+}
+
+:host ::ng-deep .p-divider {
+  height: 35px !important;
 }

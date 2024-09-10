@@ -46,6 +46,11 @@
       width: 20%;
       min-width: fit-content;
 
+      .order-id {
+        font-weight: 500;
+        color: $dark;
+      }
+
       .order-total span {
         font-weight: 600;
       }
