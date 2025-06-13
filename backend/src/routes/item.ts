@@ -21,7 +21,7 @@ itemRoutes.get('/public', filterPublicItems);
 itemRoutes.get('/search/:query', authenticate, isAdmin, searchItems);
 itemRoutes.get('/:id', authenticate, getItem);
 itemRoutes.get('/owner/:ownerId', authenticate, getItemsByOwnerId);
-itemRoutes.put('/:id', authenticate, ...createItem);
+itemRoutes.put('/:id', authenticate, updateItem);
 itemRoutes.delete('/:id', authenticate, deleteItem);
 
 export default itemRoutes;
