@@ -11,16 +11,22 @@ const ItemSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 			trim: true,
+			minlength: 1,
+			maxlength: 100,
 		},
 		description: {
 			type: String,
 			required: true,
 			trim: true,
+			minlength: 1,
+			maxlength: 1000,
 		},
 		category: {
 			type: String,
 			required: true,
 			trim: true,
+			minlength: 1,
+			maxlength: 50,
 		},
 		image: {
 			type: String,
@@ -33,6 +39,7 @@ const ItemSchema = new mongoose.Schema(
 		files: [{ type: mongoose.Schema.Types.ObjectId, ref: 'File' }],
 		price: {
 			type: Number,
+			min: 0,
 		},
 	},
 	{

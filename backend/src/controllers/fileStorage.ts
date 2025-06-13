@@ -143,7 +143,14 @@ const getFileById = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: { text: 'File ID not provided' } });
 		}
 
-		const parsedFileId = new ObjectId(fileId);
+		let parsedFileId: ObjectId;
+		try {
+			parsedFileId = new ObjectId(fileId);
+		} catch (err) {
+			return res
+				.status(400)
+				.json({ error: { text: 'Invalid file ID format' } });
+		}
 
 		const db = client.db('print3d');
 		const bucket = new GridFSBucket(db, { bucketName: 'StorageBucket' });
@@ -158,6 +165,7 @@ const getFileById = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: 'Error fetching file' });
+	} finally {
 		closeDatabaseConnection(client);
 	}
 };
@@ -171,7 +179,14 @@ const downloadFileById = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: { text: 'File ID not provided' } });
 		}
 
-		const parsedFileId = new ObjectId(fileId);
+		let parsedFileId: ObjectId;
+		try {
+			parsedFileId = new ObjectId(fileId);
+		} catch (err) {
+			return res
+				.status(400)
+				.json({ error: { text: 'Invalid file ID format' } });
+		}
 
 		const db = client.db('print3d');
 		const bucket = new GridFSBucket(db, { bucketName: 'StorageBucket' });
@@ -218,7 +233,14 @@ const deleteFileById = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: { text: 'File ID not provided' } });
 		}
 
-		const parsedFileId = new ObjectId(fileId);
+		let parsedFileId: ObjectId;
+		try {
+			parsedFileId = new ObjectId(fileId);
+		} catch (err) {
+			return res
+				.status(400)
+				.json({ error: { text: 'Invalid file ID format' } });
+		}
 
 		const db = client.db('print3d');
 		const bucket = new GridFSBucket(db, { bucketName: 'StorageBucket' });
@@ -235,6 +257,8 @@ const deleteFileById = async (req: Request, res: Response) => {
 	} catch (error) {
 		console.log(error);
 		res.status(400).json({ error: { text: `Unable to delete file`, error } });
+	} finally {
+		closeDatabaseConnection(client);
 	}
 };
 

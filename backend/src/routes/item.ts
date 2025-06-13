@@ -15,13 +15,13 @@ import {
 
 const itemRoutes = Router();
 
-itemRoutes.post('/', authenticate, createItem);
+itemRoutes.post('/', authenticate, ...createItem);
 itemRoutes.get('/', authenticate, isAdmin, getItems);
 itemRoutes.get('/public', filterPublicItems);
 itemRoutes.get('/search/:query', authenticate, isAdmin, searchItems);
 itemRoutes.get('/:id', authenticate, getItem);
 itemRoutes.get('/owner/:ownerId', authenticate, getItemsByOwnerId);
-itemRoutes.put('/:id', authenticate, updateItem);
+itemRoutes.put('/:id', authenticate, ...createItem);
 itemRoutes.delete('/:id', authenticate, deleteItem);
 
 export default itemRoutes;

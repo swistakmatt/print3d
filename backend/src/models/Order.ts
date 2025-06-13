@@ -25,6 +25,7 @@ const OrderSchema = new mongoose.Schema(
 		total: {
 			type: Number,
 			required: true,
+			min: 0,
 		},
 		status: {
 			type: String,
@@ -46,22 +47,36 @@ const OrderSchema = new mongoose.Schema(
 		address: {
 			type: String,
 			required: true,
+			trim: true,
+			minlength: 5,
+			maxlength: 200,
 		},
 		city: {
 			type: String,
 			required: true,
+			trim: true,
+			minlength: 1,
+			maxlength: 100,
 		},
 		postalCode: {
 			type: String,
 			required: true,
+			trim: true,
+			match: /^[0-9]{2}-[0-9]{3}$/, // Polish postal code format
 		},
 		country: {
 			type: String,
 			required: true,
+			trim: true,
+			minlength: 2,
+			maxlength: 100,
 		},
 		phone: {
 			type: String,
 			required: true,
+			trim: true,
+			minlength: 9,
+			maxlength: 15,
 		},
 		tracking: {
 			type: String,
